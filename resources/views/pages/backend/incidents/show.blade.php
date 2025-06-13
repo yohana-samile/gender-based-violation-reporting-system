@@ -2,11 +2,11 @@
 @section('title', 'Show Incident')
 
 @section('content')
-    <div class="py-8 bg-gray-50 w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl rounded-lg">
+    <div class="min-h-screen bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div class="bg-white overflow-hidden shadow-xl rounded-lg w-full">
                 <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between w-full">
                         <div class="mb-4 md:mb-0">
                             <h2 class="text-2xl font-bold text-gray-800">{{ $incident->title }}</h2>
                             <div class="flex items-center mt-2 space-x-4">
@@ -27,7 +27,7 @@
                                 </p>
                             </div>
                         </div>
-                        <div class="flex flex-shrink-0 space-x-4">  <!-- Medium spacing -->
+                        <div class="flex flex-shrink-0 space-x-4">
                             @if (access()->allow('case_worker'))
                                 <a href="{{ route('backend.incident.edit', $incident->id) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                     <i class="far fa-edit mr-2"></i> Edit
@@ -40,12 +40,10 @@
                     </div>
                 </div>
 
-                LOOK LIKE THERE IS SOM DIV AFFECT THIS MAIN CONTENT WIDTH SO IT FAIL TO TAKE FULL WIDTH
-                <div class="px-6 py-6">
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="px-6 py-6 w-full">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
                         <!-- Left Column (Main Content) -->
-                        <div class="lg:col-span-2 space-y-6">
-                            <!-- Incident Details Card -->
+                        <div class="lg:col-span-2 space-y-6 w-full">
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                                 <div class="flex items-center mb-4">
                                     <div class="bg-blue-100 p-2 rounded-full mr-3">
@@ -307,7 +305,7 @@
                         </div>
 
                         <!-- Right Column (Quick Actions) -->
-                        <div class="space-y-6">
+                        <div class="space-y-6 w-full">
                             @if (access()->allow('case_worker'))
                                 <!-- Update Status Card -->
                                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
@@ -433,5 +431,12 @@
     select[multiple] {
         background-image: none;
         height: auto;
+    }
+    html, body, #app {
+        width: 100%;
+    }
+    body {
+        margin: 0;
+        padding: 0;
     }
 </style>
