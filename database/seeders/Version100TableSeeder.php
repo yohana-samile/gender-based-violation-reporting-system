@@ -23,6 +23,7 @@ class Version100TableSeeder extends Seeder
 
         $this->call(PermissionGroupTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
+        $this->call(IncidentSeeder::class);
         DB::commit();
     }
 }

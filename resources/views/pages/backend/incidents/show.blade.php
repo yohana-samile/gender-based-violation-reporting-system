@@ -1,11 +1,10 @@
 @extends('layouts.backend.mainlayout')
-@section('title', 'Show Incident')
-
+@section('title', 'View Incident')
 @section('content')
     <div class="min-h-screen bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full ">
             <div class="bg-white overflow-hidden shadow-xl rounded-lg w-full">
-                <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+                <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50 pb-8">
                     <div class="flex flex-col md:flex-row md:items-center md:justify-between w-full">
                         <div class="mb-4 md:mb-0">
                             <h2 class="text-2xl font-bold text-gray-800">{{ $incident->title }}</h2>
@@ -417,26 +416,10 @@
     </div>
 @endsection
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-<style>
-    .prose {
-        line-height: 1.6;
-    }
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-    select[multiple] {
-        background-image: none;
-        height: auto;
-    }
-    html, body, #app {
-        width: 100%;
-    }
-    body {
-        margin: 0;
-        padding: 0;
-    }
-</style>
+@push('styles')
+    <style>
+        .prose {
+            line-height: 1.6;
+        }
+    </style>
+@endpush

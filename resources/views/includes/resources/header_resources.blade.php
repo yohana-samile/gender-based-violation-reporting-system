@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('asset/css/packages/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{ asset('asset/css/packages/select2.min.css')}}">
+    <script src="https://cdn.tailwindcss.com"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
