@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Providers;
+
+use App\Repositories\Frontend\Eloquent\IncidentRepository;
+use App\Repositories\Frontend\Interfaces\IncidentRepositoryInterface;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Validation\Rules\Password;
+
+class AppServiceProvider extends ServiceProvider
+{
+    /**
+     * Register any application services.
+     */
+    public function register(): void
+    {
+        $this->app->bind(
+            IncidentRepositoryInterface::class,
+            IncidentRepository::class
+        );
+    }
+
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
+    {
+        Password::defaults(function () {
+            return Password::min(8)
+                ->mixedCase()
+                ->letters()
+                ->numbers()
+                ->symbols()
+                ->uncompromised();
+        });
+        Schema::defaultStringLength(191);
+    }
+}
