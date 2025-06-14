@@ -24,14 +24,9 @@
                                     <select name="type" id="type" required
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         <option value="">Select incident type</option>
-                                        <option value="physical_violence">Physical Violence</option>
-                                        <option value="sexual_violence">Sexual Violence</option>
-                                        <option value="emotional_abuse">Emotional Abuse</option>
-                                        <option value="economic_abuse">Economic Abuse</option>
-                                        <option value="child_marriage">Child Marriage</option>
-                                        <option value="female_genital_mutilation">Female Genital Mutilation</option>
-                                        <option value="trafficking">Trafficking</option>
-                                        <option value="other">Other</option>
+                                        @foreach($incidentTypes as $type)
+                                            <option value="{{ $type->name }}"> {{ $type->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
 

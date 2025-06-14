@@ -7,11 +7,11 @@ use App\Http\Requests\Frontend\StoreIncidentRequest;
 use App\Http\Requests\Frontend\UpdateIncidentRequest;
 use App\Http\Resources\IncidentResource;
 use App\Models\SupportService;
+use App\Models\System\Code;
+use App\Models\System\CodeValue;
 use App\Repositories\Frontend\Eloquent\IncidentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class IncidentController extends Controller
 {
@@ -23,13 +23,15 @@ class IncidentController extends Controller
 
     public function index(Request $request)
     {
-        $incidents = $this->incidentRepository->paginate(10);
+        $incidents = $this->incidentRepository->all();
         return view('pages.backend.incidents.index', compact('incidents'));
     }
 
     public function create()
     {
-        return view('pages.backend.incidents.create');
+        $codeId = Code::query()->where('name', 'Case Type')->value('id');
+        $data['incidentTypes'] = CodeValue::getIncidentType($codeId);
+        return view('pages.backend.incidents.create', $data);
     }
 
     public function store(StoreIncidentRequest $request)
@@ -45,73 +47,90 @@ class IncidentController extends Controller
 
     public function show($uid)
     {
-        $data['incident'] = $this->incidentRepository->getIncidentById($uid);
+        $caseStatus = Code::query()->where('name', 'Case Status')->value('id');
+        $data['incident'] = $this->incidentRepository->getIncidentByUid($uid);
+        $data['incidentStatus'] = CodeValue::getIncidentStatus($caseStatus);
         $data['supportServices'] = SupportService::all();
         return view('pages.backend.incidents.show', $data);
     }
 
     public function edit($uid)
     {
-        $incident = $this->incidentRepository->getIcidentByUid($uid);
-        $supportServices = SupportService::all();
-        return view('pages.backend.incidents.edit', compact('incident', 'supportServices'));
+        $codeId = Code::query()->where('name', 'Case Type')->value('id');
+        $caseStatus = Code::query()->where('name', 'Case Status')->value('id');
+        $data['incident'] = $this->incidentRepository->getIncidentByUid($uid);
+        $data['supportServices'] = SupportService::all();
+        $data['incidentTypes'] = CodeValue::getIncidentType($codeId);
+        $data['incidentStatus'] = CodeValue::getIncidentStatus($caseStatus);
+
+        return view('pages.backend.incidents.edit', $data);
     }
 
     public function update(UpdateIncidentRequest $request, string $uid)
     {
         $validated = $request->validated();
-        $updated = $this->incidentRepository->update($uid, $validated);
-
-        if (!$updated) {
-            return response()->json([
-                'message' => 'Failed to update incident'
-            ], Response::HTTP_BAD_REQUEST);
+        try {
+            $updated = $this->incidentRepository->update($uid, $validated);
+            if (!$updated) {
+                return back()
+                    ->withInput()
+                    ->with('error', 'Failed to update incident');
+            }
+            return back()->with('success', 'Incident updated successfully');
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Error updating incident: '.$e->getMessage());
         }
-
-        return response()->json([
-            'message' => 'Incident updated successfully',
-            'data' => new IncidentResource($this->incidentRepository->find($uid))
-        ]);
     }
 
-    public function destroy(string $uid): JsonResponse
+    public function destroy(string $uid)
     {
-        $incident = $this->incidentRepository->getIcidentByUid($uid)->id;
-        if (!$incident) {
-            return response()->json([
-                'message' => 'Failed to delete incident, no incident match'
-            ], Response::HTTP_BAD_REQUEST);
+        try {
+            $incident = $this->incidentRepository->getIncidentByUid($uid);
+            if (!$incident) {
+                return redirect()
+                    ->route('backend.incident.index')
+                    ->with('error', 'Failed to delete incident: no incident found');
+            }
+            $deleted = $this->incidentRepository->delete($incident->id);
+            if (!$deleted) {
+                return redirect()
+                    ->route('backend.incident.index')
+                    ->with('error', 'Failed to delete incident');
+            }
+            return redirect()
+                ->route('backend.incident.index')
+                ->with('success', 'Incident deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('backend.incident.index')
+                ->with('error', 'Error deleting incident: '.$e->getMessage());
         }
-
-        $deleted = $this->incidentRepository->delete($incident);
-        if (!$deleted) {
-            return response()->json([
-                'message' => 'Failed to delete incident'
-            ], Response::HTTP_BAD_REQUEST);
-        }
-
-        return response()->json([
-            'message' => 'Incident deleted successfully'
-        ]);
     }
 
-    public function updateStatus(UpdateIncidentRequest $request, string $uid): JsonResponse
+    public function updateStatus(UpdateIncidentRequest $request, string $uid)
     {
         $validated = $request->validated();
+        try {
+            $this->incidentRepository->addCaseUpdate($uid, [
+                'update_text' => $validated['update_text'],
+                'status' => $validated['status'] ?? null,
+                'status_change' => $validated['status'] ?? null,
+            ]);
 
-        $this->incidentRepository->addCaseUpdate($uid, [
-            'update_text' => $validated['update_text'],
-            'status' => $validated['status'] ?? null,
-            'status_change' => $validated['status'] ?? null,
-        ]);
+            return redirect()
+                ->route('backend.incident.show', $uid)
+                ->with('success', 'Incident status updated successfully');
 
-        return response()->json([
-            'message' => 'Incident status updated successfully',
-            'data' => new IncidentResource($this->incidentRepository->getIcidentByUid($uid))
-        ]);
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Error updating status: '.$e->getMessage());
+        }
     }
 
-    public function attachServices(Request $request, string $uid): JsonResponse
+    public function attachServices(Request $request, string $uid)
     {
         $request->validate([
             'service_ids' => 'required|array',
@@ -119,24 +138,29 @@ class IncidentController extends Controller
             'notes' => 'nullable|string'
         ]);
 
-        $this->incidentRepository->attachSupportServices(
-            $uid,
-            $request->input('service_ids'),
-            ['notes' => $request->input('notes')]
-        );
+        try {
+            $this->incidentRepository->attachSupportServices(
+                $uid,
+                $request->input('service_ids'),
+                ['notes' => $request->input('notes')]
+            );
 
-        return response()->json([
-            'message' => 'Support services attached successfully',
-            'data' => new IncidentResource($this->incidentRepository->getIcidentByUid($uid))
-        ]);
+            return redirect()
+                ->route('backend.incident.show', $uid)
+                ->with('success', 'Support services attached successfully');
+
+        } catch (\Exception $e) {
+            return back()
+                ->withInput()
+                ->with('error', 'Error attaching services: '.$e->getMessage());
+        }
     }
 
     public function reports()
     {
-        $incidentsByStatus = $this->incidentRepository->all()->groupBy('status');
-        $incidentsByType = $this->incidentRepository->all()->groupBy('type');
-
-        return view('incidents.reports', compact('incidentsByStatus', 'incidentsByType'));
+        $data['incidentsByStatus'] = $this->incidentRepository->all()->groupBy('status');
+        $data['incidentsByType'] = $this->incidentRepository->all()->groupBy('type');
+        return view('pages.backend.incidents.reports', $data);
     }
 
     public function getByStatus(string $status): JsonResponse

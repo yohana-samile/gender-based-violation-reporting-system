@@ -10,9 +10,9 @@
             </a>
         </div>
 
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="bg-white shadow overflow-hidden lg:rounded-lg">
             <div class="overflow-x-auto">
-                <table class="mt-5 mb-3 w-full bg-white dark:bg-gray-800 rounded-lg nextbyte-table">
+                <table id="incidentsTable" class="mt-5 mb-3 w-full bg-white dark:bg-gray-800 rounded-lg">
                     <thead class="bg-gray-50">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -52,10 +52,10 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                    {{ $incident->status === 'reported' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                    {{ $incident->status === 'under_investigation' ? 'bg-blue-100 text-blue-800' : '' }}
-                                    {{ $incident->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
-                                    {{ $incident->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
+                                    {{ $incident->status === 'Reported' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                    {{ $incident->status === 'Under investigation' ? 'bg-blue-100 text-blue-800' : '' }}
+                                    {{ $incident->status === 'Resolved' ? 'bg-green-100 text-green-800' : '' }}
+                                    {{ $incident->status === 'Closed' ? 'bg-gray-100 text-gray-800' : '' }}">
                                     {{ ucfirst(str_replace('_', ' ', $incident->status)) }}
                                 </span>
                             </td>
@@ -63,17 +63,17 @@
                                 {{ $incident->occurred_at->format('M d, Y') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('incidents.show', $incident->id) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                                @can('update', $incident)
-                                    <a href="{{ route('incidents.edit', $incident->id) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                @endcan
-                                @can('delete', $incident)
-                                    <form action="{{ route('incidents.destroy', $incident->id) }}" method="POST" class="inline">
+                                <a href="{{ route('backend.incident.show', $incident->uid) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
+                                @if (access()->allow('case_worker'))
+                                    <a href="{{ route('backend.incident.edit', $incident->uid) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                    <form action="{{ route('backend.incident.destroy', $incident->uid) }}" method="POST" class="delete-form inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900" onclick="return confirm('Are you sure you want to delete this incident?')">Delete</button>
+                                        <button type="submit" class="text-red-600 hover:text-red-900">
+                                            Delete
+                                        </button>
                                     </form>
-                                @endcan
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -86,9 +86,55 @@
                     </tbody>
                 </table>
             </div>
-            <div class="px-4 py-4 bg-gray-50 sm:px-6">
-                {{ $incidents->links() }}
-            </div>
         </div>
     </div>
 @endsection
+
+@section('after-styles')
+    <style>
+        #incidentsTable_wrapper .dataTables_filter input {
+            width: 300px !important;
+        }
+        #incidentsTable_wrapper .dataTables_length select {
+            width: 80px !important;
+        }
+        #incidentsTable_wrapper .dataTables_info,
+        #incidentsTable_wrapper .dataTables_paginate {
+            padding-top: 1rem;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0.5rem 0.75rem;
+            margin-left: 0.25rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #3b82f6;
+            color: white !important;
+            border-color: #3b82f6;
+        }
+    </style>
+@endsection
+
+@push('after-scripts')
+    <script>
+        $(document).ready(function() {
+            $('#incidentsTable').DataTable({
+                dom: '<"flex justify-between items-center mb-4"<"flex-1"f><"flex"l>>rt<"flex justify-between items-center mt-4"<"flex-1"i><"flex"p>>',
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search incidents...",
+                    lengthMenu: "Show _MENU_ entries",
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                },
+                initComplete: function() {
+                    $('.dataTables_filter input').addClass('block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm');
+                    $('.dataTables_length select').addClass('block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md');
+                }
+            });
+        });
+    </script>
+@endpush

@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', config('app.name', 'NEXTHOST Email Manager'))</title>
+    <title>@yield('title', config('app.name', 'GBV-Reporting System'))</title>
 
     <link rel="stylesheet" href="{{ asset('asset/css/style.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('asset/css/packages/jquery.dataTables.min.css')}}">
     <link rel="stylesheet" href="{{ asset('asset/css/packages/select2.min.css')}}">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.0.0/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0/dist/js/tom-select.complete.min.js"></script>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -23,7 +25,6 @@
             z-index: 1000;
         }
         .customizer-setting .bg-blue-500 {
-
             writing-mode: vertical-rl;
         }
     </style>

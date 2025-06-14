@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class IncidentRepository implements IncidentRepositoryInterface
 {
@@ -69,9 +70,9 @@ class IncidentRepository implements IncidentRepositoryInterface
         });
     }
 
-    public function update(int $id, array $data): bool
+    public function update($uid, array $data): bool
     {
-        $incident = Incident::findOrFail($id);
+        $incident = Incident::query()->where('uid', $uid)->first();
         return $incident->update($data);
     }
 
@@ -93,7 +94,13 @@ class IncidentRepository implements IncidentRepositoryInterface
 
     public function getIncidentByUid($uid)
     {
-        return Incident::query()->where('uid', $uid)->with(['victims', 'perpetrators'])->first();
+        return Incident::query()->where('uid', $uid)->with([
+            'victims',
+            'perpetrators',
+            'evidence',
+            'supportServices',
+            'updates.user'
+        ])->first();
     }
 
     public function getIncidentById($id)
@@ -107,15 +114,16 @@ class IncidentRepository implements IncidentRepositoryInterface
         ])->first();
     }
 
+
+
     public function getByReporter(int $reporterId): Collection
     {
         return Incident::query()->where('reporter_id', $reporterId)->with(['victims', 'perpetrators'])->get();
     }
 
-    public function addCaseUpdate(int $incidentId, array $updateData): void
+    public function addCaseUpdate($incidentUid, array $updateData): void
     {
-        $incident = Incident::findOrFail($incidentId);
-
+        $incident = $this->getIncidentByUid($incidentUid);
         $incident->updates()->create([
             'user_id' => auth()->id(),
             'update_text' => $updateData['update_text'],
@@ -127,12 +135,14 @@ class IncidentRepository implements IncidentRepositoryInterface
         }
     }
 
-    public function attachSupportServices(int $incidentId, array $serviceIds, array $pivotData = []): void
+    public function attachSupportServices($incidentUid, array $serviceIds, array $pivotData = []): void
     {
-        $incident = Incident::findOrFail($incidentId);
+        $incident = Incident::findOrFail($incidentUid);
         $incident->supportServices()->syncWithoutDetaching(
             collect($serviceIds)->mapWithKeys(function ($id) use ($pivotData) {
-                return [$id => ['notes' => $pivotData['notes'] ?? null]];
+                return [
+                    $id => ['notes' => $pivotData['notes'] ?? null, 'uid' =>  Str::uuid()]
+                ];
             })->toArray()
         );
     }

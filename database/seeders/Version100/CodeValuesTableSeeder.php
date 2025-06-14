@@ -45,11 +45,11 @@ class CodeValuesTableSeeder extends Seeder
             ],
             /* same to case status change */
             'Case Status' => [
-                ['reference' => 'CASE01', 'name' => 'Reported', 'is_system_defined' => 0],
-                ['reference' => 'CASE03', 'name' => 'Under investigation', 'is_system_defined' => 0],
-                ['reference' => 'CASE04', 'name' => 'Resolved', 'is_system_defined' => 0],
-                ['reference' => 'CASE05', 'name' => 'Closed', 'is_system_defined' => 0],
-                ['reference' => 'CASE06', 'name' => 'null', 'is_system_defined' => 0],
+                ['reference' => 'CASE01', 'name' => 'Reported', 'is_system_defined' => 1],
+                ['reference' => 'CASE03', 'name' => 'Under investigation', 'is_system_defined' => 1],
+                ['reference' => 'CASE04', 'name' => 'Resolved', 'is_system_defined' => 1],
+                ['reference' => 'CASE05', 'name' => 'Closed', 'is_system_defined' => 1],
+                ['reference' => 'CASE06', 'name' => 'null', 'is_system_defined' => 1],
             ],
             'Case Vulnerability' => [
                 ['reference' => 'VUL01', 'name' => 'child', 'is_system_defined' => 0],
@@ -65,7 +65,14 @@ class CodeValuesTableSeeder extends Seeder
                 ['reference' => 'TYPE03', 'name' => 'Counseling', 'is_system_defined' => 0],
                 ['reference' => 'TYPE04', 'name' => 'Shelter', 'is_system_defined' => 0],
                 ['reference' => 'TYPE05', 'name' => 'Law Enforcement', 'is_system_defined' => 0],
-                ['reference' => 'TYPE06', 'name' => 'Other', 'is_system_defined' => 0],
+                ['reference' => 'TYPE06', 'name' => 'Sexual violence', 'is_system_defined' => 0],
+                ['reference' => 'TYPE07', 'name' => 'Emotional abuse', 'is_system_defined' => 0],
+                ['reference' => 'TYPE08', 'name' => 'Economic abuse', 'is_system_defined' => 0],
+                ['reference' => 'TYPE09', 'name' => 'Child marriage', 'is_system_defined' => 0],
+                ['reference' => 'TYPE10', 'name' => 'Female genital mutilation', 'is_system_defined' => 0],
+                ['reference' => 'TYPE11', 'name' => 'Trafficking', 'is_system_defined' => 0],
+                ['reference' => 'TYPE12', 'name' => 'Physical violence', 'is_system_defined' => 0],
+                ['reference' => 'TYPE13', 'name' => 'Other', 'is_system_defined' => 0],
             ],
         ];
 

@@ -14,7 +14,6 @@
                     <h3 class="text-lg font-medium mb-6">Incident Statistics</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <!-- Status Chart -->
                         <div>
                             <h4 class="text-md font-medium mb-4">Incidents by Status</h4>
                             <div class="bg-gray-50 p-4 rounded-lg">
@@ -22,7 +21,6 @@
                             </div>
                         </div>
 
-                        <!-- Type Chart -->
                         <div>
                             <h4 class="text-md font-medium mb-4">Incidents by Type</h4>
                             <div class="bg-gray-50 p-4 rounded-lg">
@@ -31,9 +29,7 @@
                         </div>
                     </div>
 
-                    <!-- Detailed Reports -->
                     <div class="space-y-6">
-                        <!-- By Status -->
                         @foreach($incidentsByStatus as $status => $incidents)
                             <div>
                                 <h4 class="text-md font-medium mb-2 capitalize">{{ str_replace('_', ' ', $status) }} ({{ count($incidents) }})</h4>
@@ -84,7 +80,6 @@
                             </div>
                         @endforeach
 
-                        <!-- By Type -->
                         @foreach($incidentsByType as $type => $incidents)
                             <div>
                                 <h4 class="text-md font-medium mb-2 capitalize">{{ str_replace('_', ' ', $type) }} ({{ count($incidents) }})</h4>
@@ -144,10 +139,9 @@
         </div>
     </div>
 
-    @push('scripts')
+    @push('after-scripts')
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
-            // Status Chart
             const statusCtx = document.getElementById('statusChart').getContext('2d');
             const statusChart = new Chart(statusCtx, {
                 type: 'pie',
@@ -174,7 +168,6 @@
                 }
             });
 
-            // Type Chart
             const typeCtx = document.getElementById('typeChart').getContext('2d');
             const typeChart = new Chart(typeCtx, {
                 type: 'bar',

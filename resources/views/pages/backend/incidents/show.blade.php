@@ -28,7 +28,7 @@
                         </div>
                         <div class="flex flex-shrink-0 space-x-4">
                             @if (access()->allow('case_worker'))
-                                <a href="{{ route('backend.incident.edit', $incident->id) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                <a href="{{ route('backend.incident.edit', $incident->uid) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                     <i class="far fa-edit mr-2"></i> Edit
                                 </a>
                             @endif
@@ -40,6 +40,16 @@
                 </div>
 
                 <div class="px-6 py-6 w-full">
+                    @if(session('success'))
+                        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                            <p>{{ session('success') }}</p>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                            <p>{{ session('error') }}</p>
+                        </div>
+                    @endif
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
                         <!-- Left Column (Main Content) -->
                         <div class="lg:col-span-2 space-y-6 w-full">
@@ -303,7 +313,6 @@
                             </div>
                         </div>
 
-                        <!-- Right Column (Quick Actions) -->
                         <div class="space-y-6 w-full">
                             @if (access()->allow('case_worker'))
                                 <!-- Update Status Card -->
@@ -314,16 +323,16 @@
                                         </div>
                                         <h3 class="text-lg font-semibold text-gray-800">Update Status</h3>
                                     </div>
-                                    <form action="{{ route('backend.incident.update-status', $incident->id) }}" method="POST">
+                                    <form action="{{ route('backend.incident.update-status', $incident->uid) }}" method="POST">
                                         @csrf
                                         <div class="space-y-4">
                                             <div>
                                                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                                                <select name="status" id="status" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm">
-                                                    <option value="reported" {{ $incident->status === 'reported' ? 'selected' : '' }}>Reported</option>
-                                                    <option value="under_investigation" {{ $incident->status === 'under_investigation' ? 'selected' : '' }}>Under Investigation</option>
-                                                    <option value="resolved" {{ $incident->status === 'resolved' ? 'selected' : '' }}>Resolved</option>
-                                                    <option value="closed" {{ $incident->status === 'closed' ? 'selected' : '' }}>Closed</option>
+                                                <select name="status" id="status" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm nextbyte-select2">
+                                                    <option value="">Select incident status</option>
+                                                    @foreach($incidentStatus as $status)
+                                                        <option value="{{ $status->name }}" {{ old('status', $incident->status) === $status->name ? 'selected' : '' }}> {{ $status->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                             <div>
@@ -337,7 +346,6 @@
                                     </form>
                                 </div>
 
-                                <!-- Attach Services Card -->
                                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                                     <div class="flex items-center mb-4">
                                         <div class="bg-green-100 p-2 rounded-full mr-3">
@@ -345,12 +353,17 @@
                                         </div>
                                         <h3 class="text-lg font-semibold text-gray-800">Attach Support Services</h3>
                                     </div>
-                                    <form action="{{ route('backend.incident.attach-services', $incident->id) }}" method="POST">
+                                    <form action="{{ route('backend.incident.attach-services', $incident->uid) }}" method="POST">
                                         @csrf
                                         <div class="space-y-4">
-                                            <div>
+                                            <div class="mb-4">
                                                 <label for="service_ids" class="block text-sm font-medium text-gray-700 mb-1">Services</label>
-                                                <select name="service_ids[]" id="service_ids" multiple class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm">
+                                                <select
+                                                    name="service_ids[]"
+                                                    id="service_ids"
+                                                    multiple
+                                                    class="mt-1 block w-full"
+                                                >
                                                     @foreach($supportServices as $service)
                                                         <option value="{{ $service->id }}">{{ $service->name }} ({{ $service->type }})</option>
                                                     @endforeach
@@ -369,7 +382,6 @@
                                 </div>
                             @endif
 
-                            <!-- Incident Summary Card -->
                             <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                                 <div class="flex items-center mb-4">
                                     <div class="bg-indigo-100 p-2 rounded-full mr-3">
@@ -416,10 +428,25 @@
     </div>
 @endsection
 
-@push('styles')
+@push('after-styles')
     <style>
         .prose {
             line-height: 1.6;
         }
     </style>
+@endpush
+
+@push('after-scripts')
+    <script>
+        new TomSelect('#service_ids', {
+            plugins: ['remove_button'],
+            maxItems: null,
+            placeholder: 'Select services...',
+            render: {
+                option: function(data, escape) {
+                    return '<div class="flex items-center">' + escape(data.text) + '</div>';
+                },
+            }
+        });
+    </script>
 @endpush

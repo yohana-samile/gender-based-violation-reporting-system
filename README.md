@@ -1,27 +1,36 @@
 # Project Name Gender-Based Violations Reporting System
 
+pull project from
+https://github.com/yohana-samile/gender-based-violation-reporting-system
+
 ## how to run this project
 1. you need to have Xampp server or ngnix server based on your choice
-2. install composer in your pc https://getcomposer.org/doc/00-intro.md#installation-windows
-3. create database with this name gsb_violation_system
-4. run migration using command below
+2. extract the zipped file you downloaded in the link above
+3. install composer in your pc https://getcomposer.org/doc/00-intro.md#installation-windows
+4. open project config .env file use mysql database
+5. run composer install in the root of your project
+6. create database with this name gsb_violation_system
+7. start server by php artisan serve then open a browser using displayed url which is 127.0.0.1/8000
+8. run migration using command below
 
-## Database migration
-### command used
-
-php artisan migrate --path=database/migrations/version100
-
-php artisan migrate --path=database/migrations/version101
+    ## Database migration
+    ### command used
+    
+    php artisan migrate --path=database/migrations/version100
+    
+    php artisan migrate --path=database/migrations/version101
+    
+9. run migration using command below
 
 php artisan db:seed
 
+
 ## login via 
-username = samileking9@gmail.com using
+username = samileking9@gmail.com using (admin)
 password = 12345678
-username = amina@gmail.com using
+username = amina@gmail.com using (admin)
 password = 12345678
 
-5. start server by php artisan serve then open a browser using displayed url which is 127.0.0.1/8000
 
 
 
@@ -30,4 +39,6 @@ password = 12345678
 
 
 
+
+## key terms to understand 
 An anonymous report is a process where someone can report information, such as unethical behavior or violations, without revealing their identity. This process is designed to protect the reporter and encourage individuals to come forward with information they might otherwise withhold due to fear of

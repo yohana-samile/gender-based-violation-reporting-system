@@ -90,14 +90,14 @@ trait CodeValueAttribute
         return $this->isactive == 1;
     }
 
-
-
-    /*Discount Type*/
-
-    /*Get total discounts amount on specified date range*/
-    public function getTotalDiscountAmountOnDateRangeAttribute($from_date, $to_date)
+    public static function getIncidentStatus($codeId)
     {
-        return (new ClientDiscountRepository())->getDiscountsOnDateRangeByType($this->id, $from_date, $to_date)->sum('amount');
+        return self::query()->where('code_id', $codeId)->get();
+    }
+
+    public static function getIncidentType($codeId)
+    {
+        return self::query()->where('code_id', $codeId)->get();
     }
 
 }
