@@ -2,10 +2,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Access\Permission;
-use App\Models\Access\Role;
 use App\Models\Access\User;
-use App\Repositories\Backend\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\ControllerMiddlewareOptions;
@@ -108,10 +105,6 @@ class LoginController extends Controller {
                 ], 400);
             }
         }
-//        else {
-//            Log::error('No user found with email', ['email' => $credentials[$this->username()]]);
-//        }
-
         return response()->json([
             'status' => 'error',
             'message' => 'These credentials do not match our records.',
@@ -146,13 +139,11 @@ class LoginController extends Controller {
 
     protected function redirectTo() {
         $user = user();
-
         if ($user) {
-            $this->redirectTo = $user->is_super_admin ? '/backend/layouts/dashboard' : '/frontend/layouts/dashboard';
+            $this->redirectTo = '/gbv/layouts/dashboard';
         } else {
             $this->redirectTo = '/login';
         }
-
         return url($this->redirectTo);
     }
 

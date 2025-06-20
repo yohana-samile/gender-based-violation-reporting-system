@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Backend\UserRequest;
+use App\Http\Requests\User\UserRequest;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Backend\UserRepository;
 

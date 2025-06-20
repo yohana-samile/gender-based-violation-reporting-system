@@ -1,12 +1,12 @@
 
 
 
-        <script src="{{ asset('asset/js/style.js') }}"></script>
-        <script src="{{ asset('asset/js/packages/jquery-3.6.0.min.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
         <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0/dist/js/tom-select.complete.min.js"></script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -56,7 +56,6 @@
                 });
             @endif
         </script>
-        @livewireScripts
         @stack('after-scripts')
     </body>
 </html>

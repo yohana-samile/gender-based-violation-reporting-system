@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Backend\IncidentController;
+use App\Http\Controllers\Gbv\IncidentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

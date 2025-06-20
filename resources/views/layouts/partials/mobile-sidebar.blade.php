@@ -26,11 +26,11 @@
                     <span class="text-lg font-semibold text-gray-800">IncidentSafe</span>
                 </div>
                 <nav class="mt-5 px-2 space-y-1">
-                    <a href="{{ route('backend.dashboard') }}" class="{{ request()->routeIs('backend.dashboard') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-home {{ request()->routeIs('dashboard') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }} mr-3"></i>
                         Dashboard
                     </a>
-                    <a href="{{ route('backend.incident.index') }}" class="{{ request()->routeIs('incident.*') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-base font-medium rounded-md">
+                    <a href="{{ route('gbv.incident.index') }}" class="{{ request()->routeIs('incident.*') ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }} group flex items-center px-2 py-2 text-base font-medium rounded-md">
                         <i class="fas fa-list {{ request()->routeIs('incident.*') ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500' }} mr-3"></i>
                         Incidents
                     </a>

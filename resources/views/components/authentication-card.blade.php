@@ -23,7 +23,7 @@
         {{ $logo }}
     </div>
 
-    <div class="container min-h-screen dark:bg-gray-900 dark:border-gray-600 text-center sm:max-w-md px-4 py-4 overflow-hidden sm:rounded-lg bg-white">
+    <div class="container min-h-screen text-center sm:max-w-md px-4 py-4 overflow-hidden sm:rounded-lg bg-white">
         {{ $slot }}
     </div>
 </div>

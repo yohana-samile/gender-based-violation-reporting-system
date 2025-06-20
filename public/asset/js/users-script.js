@@ -1,4 +1,9 @@
 let table;
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.add("hidden");
+}
+
 document.addEventListener("DOMContentLoaded", function () {
     if (window.currentRoute !== "frontend.user" && window.currentRoute !== "backend.user") {
         return;
@@ -26,10 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 data: null,
                 render: function (data, type, row, meta) {
                     return `
-                    <a href="javascript:void(0)" class="btn btn-link d-block" onclick="openCustomerDetailModal(${meta.row})">
-                        <i class="fas fa-ellipsis-v"></i>
-                    </a> ${meta.row + 1}
-                `;
+                        <a href="javascript:void(0)" class="btn btn-link d-block" onclick="openCustomerDetailModal(${meta.row})">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </a> ${meta.row + 1}
+                    `;
                 }
             },
             {
@@ -40,8 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
                         .join(' ');
                 }
-            }
-            ,
+            },
             { data: "email" },
             {
                 data: "is_active",
@@ -70,13 +74,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                     return `
                         <div class="flex items-center space-x-2">
-                            <button class="text-blue-500 dark:text-blue-400" onclick="openCustomerDetailModal(${meta.row})">
+                            <button class="text-blue-500" onclick="openCustomerDetailModal(${meta.row})">
                                  <i class="fas fa-eye"></i> Preview
-                            </button>x
-                            <a href="javascript:void(0)" class="text-green-500 dark:text-green-400 update-customer-button" data-uid="${row.uid}" data-row="${meta.row}">
+                            </button>
+                            <a href="javascript:void(0)" class="text-green-500 update-customer-button" data-uid="${row.uid}" data-row="${meta.row}">
                                 <i class="fas fa-eye"></i> Update
                             </a>
-                            <button class="text-red-500 dark:text-red-400 delete-customer" data-uid="${row.uid}">
+                            <button class="text-red-500 delete-customer" data-uid="${row.uid}">
                                 <i class="fas fa-trash-restore-alt"></i> Delete
                             </button>
                         </div>
@@ -86,7 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
         ],
         pagingType: "full_numbers",
         drawCallback: function (settings) {
-            applyDarkModeToDataTable();
             let info = settings.oInstance.api().page.info();
             let entriesCount = document.querySelector(".entriesCount");
             if (entriesCount) {
@@ -94,8 +97,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
     });
-
-    applyDarkModeToDataTable();
 
     window.openCustomerDetailModal = function (rowIndex) {
         if (!table) {
@@ -207,8 +208,6 @@ function deleteCustomer(uid) {
     });
 }
 
-
-
 function getModalTemplate(rowData, csrfToken) {
     let field = null;
     return `
@@ -217,28 +216,28 @@ function getModalTemplate(rowData, csrfToken) {
             <input type="hidden" name="_token" value="${csrfToken}">
             <input type="hidden" name="uid" value="${rowData.uid}">
             <div class="mb-4">
-                <label for="cname" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <label for="cname" class="block text-sm font-semibold text-gray-700">
                     Customer Name
                 </label>
-                <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-2 mt-1">
-                    <input id="cname" type="text" name="name" placeholder="name" value="${rowData.name}" class="w-full bg-transparent focus:outline-none dark:text-gray-200" required>
+                <div class="flex items-center border border-gray-300 rounded-lg p-2 mt-1">
+                    <input id="cname" type="text" name="name" placeholder="name" value="${rowData.name}" class="w-full bg-transparent focus:outline-none" required>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label for="cemail" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <label for="cemail" class="block text-sm font-semibold text-gray-700">
                     Customer Email
                 </label>
-                <div class="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg p-2 mt-1">
-                    <input id="cemail" type="email" name="email" placeholder="Email" value="${rowData.email}" class="w-full bg-transparent focus:outline-none dark:text-gray-200" required>
+                <div class="flex items-center border border-gray-300 rounded-lg p-2 mt-1">
+                    <input id="cemail" type="email" name="email" placeholder="Email" value="${rowData.email}" class="w-full bg-transparent focus:outline-none" required>
                 </div>
             </div>
 
             <div class="mb-4">
-                <label for="cis_active" class="block text-sm font-semibold text-gray-700 dark:text-gray-300">Active Status</label>
+                <label for="cis_active" class="block text-sm font-semibold text-gray-700">Active Status</label>
                 <div class="flex items-center mt-1">
                     <input id="cis_active" type="checkbox" name="is_active" class="mr-2" ${rowData.is_active ? 'checked' : '' }>
-                    <span class="dark:text-gray-300">Is Active?</span>
+                    <span>Is Active?</span>
                 </div>
             </div>
              <button type="submit" class="w-full bg-indigo-500 text-white py-2 rounded-lg hover:bg-indigo-600">
@@ -275,10 +274,10 @@ document.addEventListener("submit", function (e) {
 });
 
 /* TOGGLE MODALS */
-
 document.addEventListener("click", function (event) {
     if (event.target.classList.contains("delete-customer-modal")) {
         let customerUid = event.target.dataset.uid;
         document.querySelector(`.delete-customer[data-uid="${customerUid}"]`).click();
     }
 });
+

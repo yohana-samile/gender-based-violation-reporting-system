@@ -166,65 +166,6 @@ window.scrollToTop = function () {
 }
 /* END OF BACK TO TOP BUTTON */
 
-$(document).ready(function() {
-    $('.async_accounts').on('submit', function(e) {
-        e.preventDefault();
-        $('#loader').removeClass('hidden');
-
-        $.ajax({
-            url: $(this).attr('action'),
-            type: 'POST',
-            data: $(this).serialize(),
-            success: function(response) {
-                if (response.status === 200) {
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        icon: 'success',
-                        title: response.message
-                    }).then(() => {
-                        window.location.reload();
-                    });
-
-                } else {
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: false,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        icon: 'error',
-                        title: response.message
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                // console.error(xhr.responseText);
-                let errorMessage = 'An error occurred while processing your request.';
-                if (xhr.responseJSON && xhr.responseJSON.message) {
-                    errorMessage = xhr.responseJSON.message;
-                }
-                Swal.fire({
-                    toast: true,
-                    position: 'top-end',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    icon: 'error',
-                    title: errorMessage,
-                });
-            },
-            complete: function() {
-                $('#loader').addClass('hidden');
-            }
-        });
-    });
-});
-
-
 window.sendAjaxRequest = function (url, formData, fieldType) {
     $("#loader").removeClass("hidden");
 

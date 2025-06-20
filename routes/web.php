@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Auth\Events\Verified;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 
 Route::get('/login', function () {
@@ -26,20 +26,19 @@ Route::group(['middleware' => 'web'], function () {
 
     Route::get('/email/verify/{id}/{hash}', function (Request $request) {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect(user()->is_super_admin ? '/backend/layouts/dashboard' : '/frontend/layouts/dashboard');
+            return redirect('/gbv/layouts/dashboard');
         }
-
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
-        return redirect(user()->is_super_admin ? '/backend/layouts/dashboard' : '/frontend/layouts/dashboard');
+        return redirect('/gbv/layouts/dashboard');
     })->middleware(['auth', 'signed'])->name('verification.verify');
 
     Route::post('signup', [\App\Http\Controllers\Auth\RegisterController::class, 'signup'])->name('signup');
     Route::post('log_me_in', [\App\Http\Controllers\Auth\LoginController::class, 'logMeIn'])->name('log_me_in');
     Route::post('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-    Route::get('/', [\App\Http\Controllers\Backend\AdminController::class, 'landing']);
-    Route::get('dashboard', [\App\Http\Controllers\Backend\AdminController::class, 'dashboard'])->name("home");
+    Route::get('/', [\App\Http\Controllers\AdminController::class, 'landing']);
+    Route::get('dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name("home");
 
     Route::group(['middleware' => 'web'], function () {
         Route::group(['middleware' => 'dashboard'], function () {

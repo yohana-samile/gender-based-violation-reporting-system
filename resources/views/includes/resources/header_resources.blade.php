@@ -6,18 +6,35 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', config('app.name', 'GBV-Reporting System'))</title>
 
-    <link rel="stylesheet" href="{{ asset('asset/css/style.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('asset/css/packages/jquery.dataTables.min.css')}}">
-    <link rel="stylesheet" href="{{ asset('asset/css/packages/select2.min.css')}}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.0.0/dist/css/tom-select.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.0.0/dist/js/tom-select.complete.min.js"></script>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @livewireStyles
     @stack('after-styles')
     <style>
+        /* Override DataTables styles */
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_processing,
+        .dataTables_wrapper .dataTables_paginate {
+            @apply text-gray-600;
+        }
+
+        .dataTables_wrapper .dataTables_length select {
+            @apply border border-gray-300 rounded px-2 py-1 text-sm;
+        }
+
+        .dataTables_wrapper .dataTables_filter input {
+            @apply border border-gray-300 rounded px-2 py-1 ml-2 text-sm;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            @apply px-3 py-1 mx-1 border border-gray-300 rounded;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            @apply bg-blue-500 text-white border-blue-500;
+        }
         .customizer-setting {
             position: fixed;
             bottom: 40%;
@@ -26,6 +43,18 @@
         }
         .customizer-setting .bg-blue-500 {
             writing-mode: vertical-rl;
+        }
+        /* DataTables customization */
+        .dataTables_wrapper .dataTables_filter input {
+            margin-left: 0.5em;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .dataTables_wrapper .dataTables_length select {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.25rem 0.5rem;
         }
     </style>
 </head>

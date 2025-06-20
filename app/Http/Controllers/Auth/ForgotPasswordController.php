@@ -54,7 +54,7 @@ class ForgotPasswordController extends Controller
         );
 
         if ($response == Password::PASSWORD_RESET) {
-            return redirect(user()->is_super_admin ? '/backend/layouts/dashboard' : '/frontend/layouts/dashboard');
+            return redirect('/gbv/layouts/dashboard');
         }
         return back()->withErrors(['email' => __('This password reset token is invalid.')]);
     }
