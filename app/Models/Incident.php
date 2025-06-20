@@ -35,6 +35,11 @@ class Incident extends BaseModel
         return $this->hasMany(CaseUpdate::class, 'incident_id');
     }
 
+    public function statusModel()
+    {
+        return $this->belongsTo(Status::class, 'status', 'slug');
+    }
+
     public function supportServices()
     {
         return $this->belongsToMany(SupportService::class, 'incident_service')

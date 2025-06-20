@@ -241,29 +241,14 @@ if (! function_exists('getTodayDate')) {
     }
 }
 
+function getStatusClasses($status)
+{
+    $statuses = [
+        'reported' => ['bg-yellow-100', 'text-yellow-800'],
+        'under_investigation' => ['bg-blue-100', 'text-blue-800'],
+        'resolved' => ['bg-green-100', 'text-green-800'],
+        'closed' => ['bg-gray-100', 'text-gray-800'],
+    ];
 
-if (! function_exists("remove_all_white_spaces")) {
-    function remove_all_white_spaces($value) {
-        $value =  preg_replace('/\s+/', '', $value );
-        return $value;
-    }
-}
-
-
-if (! function_exists("remove_extra_white_spaces")) {
-    function remove_extra_white_spaces($value) {
-        $value =  preg_replace('/\s+/', ' ', $value );
-        $value = remove_first_this_char($value,' ');
-        $value = remove_last_this_char($value,' ');
-        return $value;
-    }
-}
-
-if (! function_exists("remove_all_special_chars")) {
-    function remove_all_special_chars($value) {
-        $value = str_replace(' ', '-', $value); // Replaces all spaces with hyphens.
-        $value =  preg_replace('/[^A-Za-z0-9\-]/', '', $value); // Removes special chars.
-        $value = str_replace('-', ' ', $value);
-        return $value;
-    }
+    return $statuses[$status] ?? ['bg-gray-100', 'text-gray-800'];
 }

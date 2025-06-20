@@ -30,6 +30,11 @@ class IncidentRepository implements IncidentRepositoryInterface
         return Incident::with(['victims', 'perpetrators', 'evidence', 'supportServices', 'updates.user'])->findOrFail($id);
     }
 
+    public function incidentsByType()
+    {
+        return Incident::with('statusModel')->get()->groupBy('type');
+    }
+
     public function create(array $data): Incident
     {
         return DB::transaction(function () use ($data) {

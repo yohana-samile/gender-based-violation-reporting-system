@@ -112,13 +112,9 @@
                                                     </div>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                                    {{ $incident->status === 'reported' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                                    {{ $incident->status === 'under_investigation' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                    {{ $incident->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
-                                                    {{ $incident->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
-                                                    {{ ucfirst(str_replace('_', ' ', $incident->status)) }}
-                                                </span>
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ implode(' ', getStatusClasses($incident->status)) }}">
+                                                        {{ ucfirst(str_replace('_', ' ', $incident->status)) }}
+                                                    </span>
                                                 </td>
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                     {{ $incident->occurred_at->format('M d, Y') }}

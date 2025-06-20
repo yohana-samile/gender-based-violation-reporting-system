@@ -9,13 +9,10 @@
                         <div class="mb-4 md:mb-0">
                             <h2 class="text-2xl font-bold text-gray-800">{{ $incident->title }}</h2>
                             <div class="flex items-center mt-2 space-x-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                    {{ $incident->status === 'reported' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                    {{ $incident->status === 'under_investigation' ? 'bg-blue-100 text-blue-800' : '' }}
-                                    {{ $incident->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
-                                    {{ $incident->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ implode(' ', getStatusClasses($incident->status)) }}">
                                     {{ ucfirst(str_replace('_', ' ', $incident->status)) }}
                                 </span>
+
                                 <p class="text-sm text-gray-600">
                                     <i class="far fa-calendar-alt mr-1"></i> Reported
                                     on {{ $incident->created_at->format('M d, Y \a\t h:i A') }}
