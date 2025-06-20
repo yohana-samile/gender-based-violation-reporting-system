@@ -1,5 +1,5 @@
 <?php
-    namespace App\Http\Controllers\Audit;
+    namespace App\Http\Controllers\Gbv\Audit;
 
     use App\Http\Controllers\Controller;
     use App\Repositories\Audit\AuditRepository;

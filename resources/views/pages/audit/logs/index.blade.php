@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.app')
 @section('title', __('label.administrator.system.audits.logs'))
 
 @push('styles')
@@ -14,43 +14,42 @@
         <h1 class="text-2xl font-bold mb-6">Log Manager</h1>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                <thead class="text-xs text-gray-700 uppercase">
                 <tr>
                     <th scope="col" class="px-6 py-3">#</th>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">File Name</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50">File Name</th>
                     <th scope="col" class="px-6 py-3">Date</th>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Last Modified</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50">Last Modified</th>
                     <th scope="col" class="px-6 py-3">File Size</th>
-                    <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">Actions</th>
+                    <th scope="col" class="px-6 py-3 bg-gray-50">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 @forelse($logFiles as $index => $logFile)
                     <tr>
                         <td class="px-6 py-4">{{ $index + 1 }}</td>
-                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">{{ $logFile['name'] }}</td>
+                        <td class="px-6 py-4 bg-gray-50">{{ $logFile['name'] }}</td>
                         <td class="px-6 py-4">{{ $logFile['date'] }}</td>
-                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800">{{ $logFile['last_modified'] }}</td>
+                        <td class="px-6 py-4 bg-gray-50">{{ $logFile['last_modified'] }}</td>
                         <td class="px-6 py-4">{{ $logFile['size'] }}</td>
-                        <td class="px-6 py-4 bg-gray-50 dark:bg-gray-800 mr-2 text-xs">
+                        <td class="px-6 py-4 bg-gray-50 mr-2 text-xs">
                             <div class="flex space-x-2">
                                 <a href="{{ route('backend.logs.show', $logFile['name']) }}"
-                                   class="text-blue-600 hover:text-blue-900"><i
-                                            class="fa fa-eye"></i> {{__('label.action_crud.preview')}}</a>
+                                   class="text-blue-600 hover:text-blue-900"><i class="fa fa-eye"></i> {{__('Preview')}}</a>
                                 <a href="{{ route('backend.logs.download', $logFile['name']) }}"
                                    class="text-green-600 hover:text-green-900"><i
-                                            class="fa fa-download"></i> {{__('label.action_crud.download')}}</a>
-                                <button class="text-red-500 dark:text-red-400 delete-log-btn"
+                                        class="fa fa-download"></i> {{__('Download')}}</a>
+                                <button class="text-red-500 delete-log-btn"
                                         data-route="{{ route('backend.logs.delete', $logFile['name']) }}">
-                                    <i class="fa fa-trash-alt"></i> {{__('label.action_crud.delete')}}
+                                    <i class="fa fa-trash-alt"></i> {{__('Delete')}}
                                 </button>
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500">
                             {{ __('No log files found') }}
                         </td>
                     </tr>
@@ -59,7 +58,7 @@
             </table>
         </div>
         @if($logFiles->count() > 0)
-            <div class="mt-4 text-sm text-gray-500 dark:text-gray-400">
+            <div class="mt-4 text-sm text-gray-500">
                 {{ __('Showing') }} {{ $logFiles->count() }} {{ __('log files') }}
             </div>
         @endif
@@ -106,8 +105,6 @@
                                 icon: data.status === 200 ? "success" : "error",
                                 title: data.message,
                             }).then(() => {
-                                console.log(data.url_destination);
-                                console.log(data.status);
                                 if (data.status === 200) {
                                     window.location.reload();
                                 }

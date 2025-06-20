@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Audit;
+namespace App\Http\Controllers\Gbv\Audit;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
@@ -17,7 +17,7 @@ class LogController extends Controller
     public function index()
     {
         $logFiles = $this->getLogFiles();
-        return view('pages.backend.audit.logs.index', compact('logFiles'));
+        return view('pages.audit.logs.index', compact('logFiles'));
     }
 
     /*
@@ -48,7 +48,7 @@ class LogController extends Controller
         $logContent = File::get($filePath);
         $groupedLogs = $this->parseAndGroupLogs($logContent);
 
-        return view('pages.backend.audit.logs.show', [
+        return view('pages.audit.logs.show', [
             'fileName' => $fileName,
             'groupedLogs' => $groupedLogs
         ]);

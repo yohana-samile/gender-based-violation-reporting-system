@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.app')
 @section('title', __('Log Viewer'))
 
 @section('content')
@@ -10,8 +10,8 @@
             </a>
         </div>
 
-        <div class="bg-white rounded-lg shadow overflow-hidden dark:bg-gray-800">
-            <div class="p-4 border-b dark:border-gray-700">
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="p-4 border-b">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-4 gap-4">
                         <button id="expand-all" class="text-sm text-blue-600 hover:text-blue-800">
@@ -22,7 +22,7 @@
                         </button>
                         <a href="{{ route('backend.logs.download', $fileName) }}"
                            class="text-green-600 hover:text-green-900"><i
-                                    class="fa fa-download"></i> {{__('label.action_crud.download')}}</a>
+                                class="fa fa-download"></i> {{__('Download')}}</a>
                     </div>
                     <div class="text-sm text-gray-500">
                         {{ count($groupedLogs) }} {{ __('log groups') }}
@@ -30,13 +30,13 @@
                 </div>
             </div>
 
-            <div class="divide-y divide-gray-200 dark:divide-gray-700" id="log-accordion">
+            <div class="divide-y divide-gray-200" id="log-accordion">
                 @foreach($groupedLogs as $index => $group)
                     <div class="log-group">
-                        <button class="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700 group-toggle"
+                        <button class="w-full px-4 py-3 text-left hover:bg-gray-50 group-toggle"
                                 data-target="#log-group-{{ $index }}">
                             <div class="flex justify-between items-center">
-                                <div class="font-medium text-gray-900 dark:text-white">
+                                <div class="font-medium text-gray-900">
                                     <span class="text-blue-500 mr-2">
                                         <i class="fas fa-clock"></i> {{ $group['formatted_time'] }}
                                     </span>
@@ -51,8 +51,8 @@
                         </button>
 
                         <div id="log-group-{{ $index }}" class="log-content px-4 pb-3 hidden">
-                            <div class="bg-gray-50 dark:bg-gray-700 rounded p-3">
-                                <pre class="text-sm font-mono text-gray-800 dark:text-gray-300 whitespace-pre-wrap max-h-96 overflow-y-auto">
+                            <div class="bg-gray-50 rounded p-3">
+                                <pre class="text-sm font-mono text-gray-800 whitespace-pre-wrap max-h-96 overflow-y-auto">
                                    @foreach($group['messages'] as $message)
                                         {{ $group['log_timestamp'] }} {{ $message }}
                                     @endforeach
@@ -60,7 +60,6 @@
                             </div>
                         </div>
                     </div>
-
                 @endforeach
             </div>
         </div>
@@ -114,18 +113,6 @@
                     icon.classList.remove('rotate-180');
                 });
             });
-
-            // Optional: Expand error-related logs only if needed
-            // Comment out this block if you don't want auto-expand anymore
-            /*
-            document.querySelectorAll('.log-group').forEach(group => {
-                const content = group.querySelector('pre').textContent.toLowerCase();
-                if (content.includes('error') || content.includes('fail') || content.includes('exception')) {
-                    group.querySelector('.log-content').classList.remove('hidden');
-                    group.querySelector('i.fa-chevron-down').classList.add('rotate-180');
-                }
-            });
-            */
         });
     </script>
 @endpush

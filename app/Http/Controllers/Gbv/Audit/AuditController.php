@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Audit;
+namespace App\Http\Controllers\Gbv\Audit;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Audit\AuditRepository;
@@ -18,7 +18,7 @@ class AuditController extends  Controller
     }
 
     public function index() {
-        return view('pages.backend.audit.index');
+        return view('pages.audit.index');
     }
 
     public function profile($audit) {
@@ -33,7 +33,7 @@ class AuditController extends  Controller
 
         $audits->new_values = json_decode($audits->new_values ?? '{}', true);
         $audits->old_values = json_decode($audits->old_values ?? '{}', true);
-        return view('pages.backend.audit.profile.profile', [
+        return view('pages.audit.profile.profile', [
             'audits' => $audits,
         ]);
     }
