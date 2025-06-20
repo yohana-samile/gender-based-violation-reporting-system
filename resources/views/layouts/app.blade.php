@@ -97,11 +97,11 @@
                     Dashboard
                 </x-nav-link>
                 @if (access()->allow('case_worker'))
-                    <x-nav-link href="{{ route('gbv.incident.index') }}" :active="request()->routeIs('backend.incident.index')" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md group">
+                    <x-nav-link href="{{ route('gbv.incident.index') }}" :active="request()->routeIs('gbv.incident.index')" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md group">
                         <i class="fas fa-list mr-3 text-gray-400 group-hover:text-blue-600"></i>
                         Incidents
                     </x-nav-link>
-                    <x-nav-link href="{{ route('gbv.incident.reports') }}" :active="request()->routeIs('backend.incident.index')" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md group">
+                    <x-nav-link href="{{ route('gbv.report.reports') }}" :active="request()->routeIs('gbv.report.reports')" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md group">
                         <i class="fas fa-chart-bar mr-3 text-gray-400 group-hover:text-blue-600"></i>
                         Reports
                     </x-nav-link>

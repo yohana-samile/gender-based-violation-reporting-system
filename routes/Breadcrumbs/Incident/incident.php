@@ -1,5 +1,5 @@
 <?php
-Breadcrumbs::for('gbv.user', function ($breadcrumbs) {
+Breadcrumbs::for('gbv.incident.index', function ($breadcrumbs) {
     $breadcrumbs->parent('home');
     $breadcrumbs->push(__('Incident'), route('gbv.incident.index'));
 });
@@ -10,7 +10,7 @@ Breadcrumbs::for('gbv.incident.create',function($breadcrumbs){
     $breadcrumbs->push(__('Create Incident' ), route('gbv.incident.create'));
 });
 
-Breadcrumbs::for('gbv.show.incident', function ($breadcrumbs, $incident) {
+Breadcrumbs::for('gbv.incident.show', function ($breadcrumbs, $incident) {
     $breadcrumbs->parent('gbv.incident.index');
     $breadcrumbs->push(__('Show Incident'), route('gbv.incident.show', $incident));
 });

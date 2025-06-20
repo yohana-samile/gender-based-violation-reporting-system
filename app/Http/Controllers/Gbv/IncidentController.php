@@ -148,7 +148,6 @@ class IncidentController extends Controller
             return redirect()
                 ->route('gbv.incident.show', $uid)
                 ->with('success', 'Support services attached successfully');
-
         } catch (\Exception $e) {
             return back()
                 ->withInput()
@@ -156,12 +155,6 @@ class IncidentController extends Controller
         }
     }
 
-    public function reports()
-    {
-        $data['incidentsByStatus'] = $this->incidentRepository->all()->groupBy('status');
-        $data['incidentsByType'] = $this->incidentRepository->all()->groupBy('type');
-        return view('pages.incidents.reports', $data);
-    }
 
     public function getByStatus(string $status): JsonResponse
     {

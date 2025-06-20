@@ -56,7 +56,7 @@
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        <a href="{{ route('incidents.show', $incident->id) }}" class="text-blue-600 hover:text-blue-800">
+                                                        <a href="{{ route('gbv.incident.show', $incident->uid) }}" class="text-blue-600 hover:text-blue-800">
                                                             {{ $incident->title }}
                                                         </a>
                                                     </div>
@@ -106,7 +106,7 @@
                                             <tr>
                                                 <td class="px-6 py-4 whitespace-nowrap">
                                                     <div class="text-sm font-medium text-gray-900">
-                                                        <a href="{{ route('incidents.show', $incident->id) }}" class="text-blue-600 hover:text-blue-800">
+                                                        <a href="{{ route('gbv.incident.show', $incident->uid) }}" class="text-blue-600 hover:text-blue-800">
                                                             {{ $incident->title }}
                                                         </a>
                                                     </div>
@@ -146,9 +146,9 @@
             const statusChart = new Chart(statusCtx, {
                 type: 'pie',
                 data: {
-                    labels: {!! json_encode($incidentsByStatus->keys()->map(fn($k) => ucfirst(str_replace('_', ' ', $k))) !!},
+                    labels: {!! json_encode($incidentsByStatus->keys()->map(fn($k) => ucfirst(str_replace('_', ' ', $k)))->values()) !!},
+                    data: {!! json_encode($incidentsByStatus->map(fn($i) => count($i))->values()) !!},
                     datasets: [{
-                        data: {!! json_encode($incidentsByStatus->map(fn($i) => count($i))) !!},
                         backgroundColor: [
                             '#FBBF24', // yellow-400 for reported
                             '#60A5FA', // blue-400 for under_investigation

@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.app')
 @section('title', 'User Activity')
 
 @push('after-styles')

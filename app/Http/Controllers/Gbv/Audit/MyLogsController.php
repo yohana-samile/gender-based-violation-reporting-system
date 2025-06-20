@@ -13,7 +13,12 @@
             $this->audit_repo = new AuditRepository();
         }
         public function index() {
-            return view('pages.backend.my_logs.index');
+            return view('pages.my_logs.index');
+        }
+
+        public function profileShow()
+        {
+            return view('pages.profile.show');
         }
 
         public function profile($audit) {
@@ -27,7 +32,7 @@
                 )
                 ->where('audits.id', $audit)->first();
 
-            return view('pages.backend.my_logs.profile.profile', [
+            return view('pages.my_logs.profile.profile', [
                 'audits' => $audits,
             ]);
         }

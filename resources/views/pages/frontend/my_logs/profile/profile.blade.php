@@ -1,4 +1,4 @@
-@extends('layouts.frontend.mainlayout')
+@extends('layouts.app')
 @section('title', __('label.administrator.system.audits.my_logs'))
 
 @push('after-styles')

@@ -1,6 +1,6 @@
 <?php
     Route::group([
-        'namespace' => 'Backend\Audit',
+        'namespace' => 'Gbv\Audit',
         'prefix' => 'backend',
         'as' => 'backend.'
     ], function () {

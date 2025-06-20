@@ -1,4 +1,4 @@
-@extends('layouts.mainlayout')
+@extends('layouts.app')
 @section('title', __('My logs'))
 
 @push('after-styles')
@@ -10,17 +10,17 @@
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 class="text-xl font-bold">
             {{ __('My logs') }}
-            <span class="mt-2 text-gray-600 dark:text-gray-400 entriesCount text-sm"></span>
+            <span class="mt-2 text-gray-600 entriesCount text-sm"></span>
         </h1>
 
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 nextbyte-table"
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 nextbyte-table"
                id="my-logs-table">
-            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase">
             <tr>
-                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                <th scope="col" class="px-6 py-3 bg-gray-50">
                     {{__('Event')}}
                 </th>
-                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
+                <th scope="col" class="px-6 py-3 bg-gray-50">
                     {{__('Created at')}}
                 </th>
                 <th scope="col" class="px-6 py-3">
@@ -86,7 +86,6 @@
 
                 pagingType: "full_numbers",
                 drawCallback: function (settings) {
-                    applyDarkModeToDataTable();
                     let info = settings.oInstance.api().page.info();
                     let entriesCount = document.querySelector(".entriesCount");
                     if (entriesCount) {
