@@ -1,9 +1,6 @@
 <?php
 
-namespace Database\Seeders\Version100;
-
 use App\Models\Status;
-use App\Models\System\Code;
 use Illuminate\Database\Seeder;
 use Database\TruncateTable;
 use Database\DisableForeignKeys;
@@ -46,8 +43,8 @@ class StatusTableSeeder extends Seeder
             ],
         ];
 
-        $this->disableForeignKeys("status");
-        $this->delete('status');
+        $this->disableForeignKeys("statuses");
+        $this->delete('statuses');
 
         foreach ($statuses as $status) {
             Status::updateOrCreate(
@@ -62,6 +59,6 @@ class StatusTableSeeder extends Seeder
             );
         }
 
-        $this->enableForeignKeys("status");
+        $this->enableForeignKeys("statuses");
     }
 }

@@ -1,7 +1,7 @@
 <div>
     <div class="mb-4 flex items-start space-x-8">
         <div class="w-1/2">
-            <h2 class="text-xl font-bold mb-4 text-gray-800 dark:text-white">{{ __('Profile information') }}</h2>
+            <h2 class="text-xl font-bold mb-4 text-gray-800">{{ __('Profile information') }}</h2>
             <p>{{ __('Profile information note') }}</p>
 
             @if ($success)
@@ -27,7 +27,7 @@
                                 reader.readAsDataURL($refs.photo.files[0]);
                             " />
 
-                    <label for="photo" class="block font-medium text-sm text-gray-700 dark:text-gray-200">{{__('Photo')}}</label>
+                    <label for="photo" class="block font-medium text-sm text-gray-700">{{__('Photo')}}</label>
                     <div class="mt-2" x-show="!photoPreview">
                         @if(user()->profile_photo_path)
                             <img src="{{ user()->profile_photo_url }}" alt="{{ user()->name }}" class="rounded-full w-20 h-20 object-cover">
@@ -60,17 +60,17 @@
 
                 <!-- Name -->
                 <div class="col-span-6 sm:col-span-4">
-                    <label for="name" class="block font-medium text-sm text-gray-700 dark:text-gray-200">{{__('label.name')}}</label>
-                    <input id="name" type="text" class="mt-1 block w-full border-gray-300 dark:border-gray-600 focus:border-indigo-500 focus:ring focus:ring-indigo-200 bg-white text-black dark:bg-gray-900 dark:text-white rounded-md shadow-sm"
-                        wire:model="state.name" required autocomplete="name" />
+                    <label for="name" class="block font-medium text-sm text-gray-700">{{__('Name')}}</label>
+                    <input id="name" type="text" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 bg-white text-black rounded-md shadow-sm"
+                           wire:model="state.name" required autocomplete="name" />
                     <x-input-error for="name" class="mt-2" />
                 </div>
 
                 <!-- Email -->
                 <div class="col-span-6 sm:col-span-4">
-                    <label for="email" class="block font-medium text-sm text-gray-700 dark:text-gray-200">{{__('label.email')}}</label>
-                    <input id="email" type="email" class="mt-1 block w-full border-gray-300 dark:border-gray-600 focus:border-indigo-500 focus:ring focus:ring-indigo-200 bg-white text-black dark:bg-gray-900 dark:text-white rounded-md shadow-sm"
-                        wire:model="state.email" required autocomplete="email" />
+                    <label for="email" class="block font-medium text-sm text-gray-700">{{__('Email')}}</label>
+                    <input id="email" type="email" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200 bg-white text-black rounded-md shadow-sm"
+                           wire:model="state.email" required autocomplete="email" />
                     <x-input-error for="email" class="mt-2" />
 
                     @if (user()->email_verified_at === null)

@@ -123,7 +123,6 @@
                             </x-danger-button>
                         </x-confirms-password>
                     @endif
-
                 @endif
             </div>
         </x-slot>

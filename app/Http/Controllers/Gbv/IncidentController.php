@@ -12,6 +12,7 @@ use App\Models\System\CodeValue;
 use App\Repositories\Frontend\Eloquent\IncidentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class IncidentController extends Controller
 {
@@ -39,6 +40,7 @@ class IncidentController extends Controller
         $validated = $request->validated();
         try {
             $incident = $this->incidentRepository->create($validated);
+            Cache::forget('dashboard_metrics');
             return redirect()->route('gbv.incident.show', $incident->id)->with('success', 'Incident reported successfully');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error creating incident: '.$e->getMessage());
@@ -76,6 +78,7 @@ class IncidentController extends Controller
                     ->withInput()
                     ->with('error', 'Failed to update incident');
             }
+            Cache::forget('dashboard_metrics');
             return back()->with('success', 'Incident updated successfully');
         } catch (\Exception $e) {
             return back()
@@ -99,6 +102,7 @@ class IncidentController extends Controller
                     ->route('gbv.incident.index')
                     ->with('error', 'Failed to delete incident');
             }
+            Cache::forget('dashboard_metrics');
             return redirect()
                 ->route('gbv.incident.index')
                 ->with('success', 'Incident deleted successfully');
@@ -118,7 +122,7 @@ class IncidentController extends Controller
                 'status' => $validated['status'] ?? null,
                 'status_change' => $validated['status'] ?? null,
             ]);
-
+            Cache::forget('dashboard_metrics');
             return redirect()
                 ->route('gbv.incident.show', $uid)
                 ->with('success', 'Incident status updated successfully');
@@ -144,7 +148,7 @@ class IncidentController extends Controller
                 $request->input('service_ids'),
                 ['notes' => $request->input('notes')]
             );
-
+            Cache::forget('dashboard_metrics');
             return redirect()
                 ->route('gbv.incident.show', $uid)
                 ->with('success', 'Support services attached successfully');

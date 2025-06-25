@@ -31,9 +31,17 @@ password = 12345678
 username = amina@gmail.com using (admin)
 password = 12345678
 
+php artisan storage:link
+npm install
+npm install -D autoprefixer postcss
+php artisan optimize:clear
+npm run build
+npm run dev
 
 
+php -m | findstr gd // verify gd if yes
 
+composer install
 
 ### if you have question ask via 0620350083 or y.samile@nextbyte.co.tz
 

@@ -7,6 +7,9 @@ class IncidentSeeder extends Seeder
 {
     public function run()
     {
-        Incident::factory()->count(5)->create(['reporter_id' => 1]);
+        $count = Incident::query()->count();
+        if($count == 0) {
+            Incident::factory()->count(10)->create(['reporter_id' => 1]);
+        }
     }
 }

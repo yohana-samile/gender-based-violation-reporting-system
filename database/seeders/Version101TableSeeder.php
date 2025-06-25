@@ -18,8 +18,13 @@ class Version101TableSeeder extends Seeder
     public function run()
     {
         DB::beginTransaction();
-        $this->call(RolesTableSeeder::class);
-        $this->call(UserSeeder::class);
+        $this->call(CodesTableSeeder::class);
+        $this->call(CodeValuesTableSeeder::class);
+        $this->call(StatusTableSeeder::class);
+        $this->call(DistrictsTableSeeder::class);
+        $this->call(SupportServicesSeeder::class);
+
+        $this->call(IncidentSeeder::class);
         DB::commit();
     }
 }

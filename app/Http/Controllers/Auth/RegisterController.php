@@ -7,7 +7,7 @@ use App\Repositories\Backend\UserRepository;
 
 class RegisterController extends Controller
 {
-    protected $redirectTo = RouteServiceProvider::HOME;
+//    protected $redirectTo = RouteServiceProvider::HOME;
     protected $userRepository;
 
     public function __construct()
@@ -16,26 +16,41 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    public function signup(UserRequest $request){
+    public function showRegistrationForm()
+    {
+        return view("auth/register");
+    }
+
+    public function signup(UserRequest $request)
+    {
         return $this->create($request);
     }
 
-    protected function create(UserRequest $request) {
+    protected function create(UserRequest $request)
+    {
         $input = $request->validated();
+
         try {
             $user = $this->userRepository->store($input);
+
             if ($user) {
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Login success',
+                    'message' => 'Registration successful',
                     'url_destination' => '/login',
                 ], 201);
             }
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to register user. Please try again.'
+            ], 500);
         }
-        catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to register user. Please try again.');
-        }
-        return view('auth.verify');
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Registration failed'
+        ], 400);
     }
 }
 

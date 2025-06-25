@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use App\Models\Access\User;
+use Illuminate\Support\Facades\Cache;
 
 class Incident extends BaseModel
 {
@@ -9,6 +10,21 @@ class Incident extends BaseModel
         'occurred_at' => 'datetime',
         'is_anonymous' => 'boolean'
     ];
+
+    protected static function booted()
+    {
+        static::created(function () {
+            Cache::forget('dashboard_metrics');
+        });
+
+        static::updated(function () {
+            Cache::forget('dashboard_metrics');
+        });
+
+        static::deleted(function () {
+            Cache::forget('dashboard_metrics');
+        });
+    }
 
     public function reporter()
     {

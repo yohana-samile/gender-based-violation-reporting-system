@@ -3,42 +3,50 @@
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-Route::get('/register', function () {
-    return view('auth.register');
-})->name('register');
+use App\Http\Controllers\Auth\{
+    ForgotPasswordController,
+    RegisterController,
+    LoginController
+};
+use App\Http\Controllers\AdminController;
 
 Route::group(['middleware' => 'web'], function () {
-    Route::prefix('password')->group(function () {
-        Route::get('request', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showForgotPassForm'])->name('password.request');
-        Route::get('reset/{token}', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
-        Route::post('reset', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'reset'])->name('password.update');
-        Route::post('email', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'sendPasswordResetLink'])->name('password.email');
+    Route::controller(LoginController::class)->group(function () {
+        Route::get('/login', 'showLoginForm')->name('login');
+        Route::post('/log_me_in', 'logMeIn')->name('log_me_in');
+        Route::post('/logout', 'logout')->name('logout');
+    });
 
-        Route::post('resend', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'verificationSend'])->name('verification.send');
-        Route::post('confirm', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'passwordConfirm'])->name('password.confirm');
-        Route::post('challenge', [App\Http\Controllers\Auth\ForgotPasswordController::class, 'twoFactorChallenge'])->name('two-factor.login');
+    Route::controller(RegisterController::class)->group(function () {
+        Route::get('/register', 'showRegistrationForm')->name('register');
+        Route::post('/signup', 'signup')->name('signup');
+    });
+
+    Route::controller(ForgotPasswordController::class)->prefix('password')->group(function () {
+        Route::get('/request', 'showForgotPassForm')->name('password.request');
+        Route::post('/email', 'sendPasswordResetLink')->name('password.email');
+        Route::get('/reset/{token}', 'showResetForm')->name('password.reset');
+        Route::post('/reset', 'reset')->name('password.update');
+
+        // Additional authentication flows
+        Route::post('/resend', 'verificationSend')->name('verification.send');
+        Route::post('/confirm', 'passwordConfirm')->name('password.confirm');
+        Route::post('/challenge', 'twoFactorChallenge')->name('two-factor.login');
     });
 
     Route::get('/email/verify/{id}/{hash}', function (Request $request) {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect('/gbv/layouts/dashboard');
+            return redirect()->intended(route('dashboard'));
         }
         if ($request->user()->markEmailAsVerified()) {
             event(new Verified($request->user()));
         }
-        return redirect('/gbv/layouts/dashboard');
+        return redirect()->intended(route('dashboard'))
+            ->with('verified', true);
     })->middleware(['auth', 'signed'])->name('verification.verify');
 
-    Route::post('signup', [\App\Http\Controllers\Auth\RegisterController::class, 'signup'])->name('signup');
-    Route::post('log_me_in', [\App\Http\Controllers\Auth\LoginController::class, 'logMeIn'])->name('log_me_in');
-    Route::post('logout', [\App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
-    Route::get('/', [\App\Http\Controllers\AdminController::class, 'landing']);
-    Route::get('dashboard', [\App\Http\Controllers\AdminController::class, 'dashboard'])->name("home");
+    Route::get('/', [AdminController::class, 'landing']);
+    Route::get('dashboard', [AdminController::class, 'dashboard'])->name("home");
 
     Route::group(['middleware' => 'web'], function () {
         Route::group(['middleware' => 'dashboard'], function () {

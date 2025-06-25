@@ -16,7 +16,10 @@ return new class extends Migration
             $table->foreignId('incident_id')->constrained()->onDelete('cascade');
             $table->string('file_path');
             $table->string('file_type');
+            $table->string('mime_type')->nullable();
             $table->text('description')->nullable();
+            $table->string('file_size')->nullable();
+            $table->text('original_name')->nullable();
             $table->string('uid');
             $table->timestamps();
             $table->softDeletes();
