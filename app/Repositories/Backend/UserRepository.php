@@ -33,10 +33,11 @@ class UserRepository extends  BaseRepository {
 
     protected function assignRolesAndPermissions($user)
     {
-        $role = Role::getRoleByName('reporter');
-        if ($role) {
-            $user->roles()->sync([$role->id]);
+        $role = Role::getRoleByName('Reporter');
+        if (!$role) {
+            return false;
         }
+        $user->roles()->sync([$role->id]);
         $permission = Permission::getPermissionByName('reporter');
         if ($permission) {
             $user->permissions()->sync([$permission->id]);

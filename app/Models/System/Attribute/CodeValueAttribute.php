@@ -100,4 +100,13 @@ trait CodeValueAttribute
         return self::query()->where('code_id', $codeId)->get();
     }
 
+    public static function getIncidentGender($codeId)
+    {
+        return self::query()->where('code_id', $codeId)->get();
+    }
+    public static function getIncidentVulnerabilities($codeId)
+    {
+        return self::query()->where('code_id', $codeId)->get();
+    }
+
 }

@@ -45,10 +45,10 @@ class CodeValuesTableSeeder extends Seeder
             ],
             /* same to case status change */
             'Case Status' => [
-                ['reference' => 'CASE01', 'name' => 'Reported', 'is_system_defined' => 1],
-                ['reference' => 'CASE03', 'name' => 'Under investigation', 'is_system_defined' => 1],
-                ['reference' => 'CASE04', 'name' => 'Resolved', 'is_system_defined' => 1],
-                ['reference' => 'CASE05', 'name' => 'Closed', 'is_system_defined' => 1],
+                ['reference' => 'CASE01', 'name' => 'reported', 'is_system_defined' => 1],
+                ['reference' => 'CASE03', 'name' => 'under_investigation', 'is_system_defined' => 1],
+                ['reference' => 'CASE04', 'name' => 'resolved', 'is_system_defined' => 1],
+                ['reference' => 'CASE05', 'name' => 'closed', 'is_system_defined' => 1],
                 ['reference' => 'CASE06', 'name' => 'null', 'is_system_defined' => 1],
             ],
             'Case Vulnerability' => [

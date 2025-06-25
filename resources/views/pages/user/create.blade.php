@@ -13,8 +13,7 @@
                         {{ __('Name') }}
                     </label>
                     <div class="flex items-center border border-gray-300 rounded-lg p-2 mt-1">
-                        <input id="name" type="text" name="name" placeholder="{{ __('name') }}"
-                               class="w-full bg-transparent focus:outline-none" required>
+                        <input id="name" type="text" name="name" placeholder="{{ __('name') }}" class="w-full bg-transparent focus:outline-none" required>
                     </div>
                 </div>
 
@@ -23,8 +22,7 @@
                         {{ __('email') }}
                     </label>
                     <div class="flex items-center border border-gray-300 rounded-lg p-2 mt-1">
-                        <input id="email" type="email" name="email" placeholder="{{ __('Enter email') }}"
-                               class="w-full bg-transparent focus:outline-none" required>
+                        <input id="email" type="email" name="email" placeholder="{{ __('Enter email') }}" class="w-full bg-transparent focus:outline-none" required>
                     </div>
                 </div>
             </div>

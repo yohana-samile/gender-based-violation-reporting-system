@@ -48,6 +48,7 @@ class IncidentRepository implements IncidentRepositoryInterface
                 'type' => $data['type'],
                 'status' => $caseStatus,
                 'is_anonymous' => $data['is_anonymous'] ?? false,
+                'uid' => Str::uuid()
             ]);
 
             foreach ($data['victims'] as $victimData) {
@@ -142,7 +143,7 @@ class IncidentRepository implements IncidentRepositoryInterface
 
     public function attachSupportServices($incidentUid, array $serviceIds, array $pivotData = []): void
     {
-        $incident = Incident::findOrFail($incidentUid);
+        $incident = $this->getIncidentByUid($incidentUid);
         $incident->supportServices()->syncWithoutDetaching(
             collect($serviceIds)->mapWithKeys(function ($id) use ($pivotData) {
                 return [

@@ -41,16 +41,6 @@
                 </div>
 
                 <div class="px-6 py-6 w-full">
-                    @if(session('success'))
-                        <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
-                            <p>{{ session('success') }}</p>
-                        </div>
-                    @endif
-                    @if(session('error'))
-                        <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
-                            <p>{{ session('error') }}</p>
-                        </div>
-                    @endif
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full">
                         <!-- Left Column (Main Content) -->
                         <div class="lg:col-span-2 space-y-6 w-full">
@@ -337,7 +327,6 @@
 
                         <div class="space-y-6 w-full">
                             @if (access()->allow('case_worker'))
-                                <!-- Update Status Card -->
                                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                                     <div class="flex items-center mb-4">
                                         <div class="bg-blue-100 p-2 rounded-full mr-3">
@@ -353,7 +342,7 @@
                                                 <label for="status"
                                                        class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                                                 <select name="status" id="status"
-                                                        class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm nextbyte-select2">
+                                                        class="incident-status block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md shadow-sm nextbyte-select2">
                                                     <option value="">Select incident status</option>
                                                     @foreach($incidentStatus as $status)
                                                         <option
@@ -384,27 +373,20 @@
                                         </div>
                                         <h3 class="text-lg font-semibold text-gray-800">Attach Support Services</h3>
                                     </div>
-                                    <form action="{{ route('gbv.incident.attach-services', $incident->uid) }}"
-                                          method="POST">
+                                    <form action="{{ route('gbv.incident.attach-services', $incident->uid) }}" method="POST">
                                         @csrf
                                         <div class="space-y-4">
                                             <div class="mb-4">
-                                                <label for="service_ids"
-                                                       class="block text-sm font-medium text-gray-700 mb-1">Services</label>
-                                                <select
-                                                    name="service_ids[]"
-                                                    id="service_ids"
-                                                    multiple
-                                                    class="mt-1 block w-full"
-                                                >
+                                                <label for="service_ids" class="block text-sm font-medium text-gray-700 mb-1">Services</label>
+
+                                                <select name="service_ids[]" id="service_ids" multiple class="mt-1 block w-full select2-multiple">
                                                     @foreach($supportServices as $service)
                                                         <option value="{{ $service->id }}">{{ $service->name }}
                                                             ({{ $service->type }})
                                                         </option>
                                                     @endforeach
                                                 </select>
-                                                <p class="mt-1 text-xs text-gray-500">Hold Ctrl/Cmd to select
-                                                    multiple</p>
+                                                <p class="mt-1 text-xs text-gray-500">Hold Ctrl/Cmd to select multiple</p>
                                             </div>
                                             <div>
                                                 <label for="notes" class="block text-sm font-medium text-gray-700 mb-1">Notes</label>
@@ -468,27 +450,28 @@
             </div>
         </div>
     </div>
-@endsection
 
-@push('after-styles')
-    <style>
-        .prose {
-            line-height: 1.6;
-        }
-    </style>
-@endpush
 
-@push('after-scripts')
     <script>
-        new TomSelect('#service_ids', {
-            plugins: ['remove_button'],
-            maxItems: null,
-            placeholder: 'Select services...',
-            render: {
-                option: function (data, escape) {
-                    return '<div class="flex items-center">' + escape(data.text) + '</div>';
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#service_ids').select2({
+                placeholder: 'Select services...',
+                allowClear: true,
+                width: '100%',
+                closeOnSelect: false,
+                templateSelection: function(data) {
+                    return $('<span class="select2-selection__choice">' + data.text + '</span>');
                 },
-            }
+                templateResult: function(data) {
+                    return $('<div class="flex items-center">' + data.text + '</div>');
+                }
+            });
+
+            $('.incident-status').select2({
+                placeholder: 'Select incident status',
+                allowClear: true,
+                width: '100%'
+            });
         });
     </script>
-@endpush
+@endsection

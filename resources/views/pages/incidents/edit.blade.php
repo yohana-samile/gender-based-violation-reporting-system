@@ -62,11 +62,14 @@
                                 </div>
 
                                 <div>
-                                    <label for="location"
-                                           class="block text-sm font-medium text-gray-700">Location</label>
-                                    <input type="text" name="location" id="location"
-                                           value="{{ old('location', $incident->location) }}" required
-                                           class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                    <label for="location" class="block text-sm font-medium text-gray-700">Location</label>
+                                    <select name="location" id="location" required
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                        <option value="">Select location of incident</option>
+                                        @foreach($locations as $location)
+                                            <option value="{{ $location->name }}" {{ old('location', $location->name) === $location->name ? 'selected' : '' }}> {{ $location->name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 @if (access()->allow('case_worker'))
@@ -77,8 +80,7 @@
                                                 class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                             <option value="">Select incident status</option>
                                             @foreach($incidentStatus as $status)
-                                                <option
-                                                    value="{{ $status->name }}" {{ old('status', $incident->status) === $status->name ? 'selected' : '' }}> {{ $status->name }}</option>
+                                                <option value="{{ $status->name }}" {{ old('status', $incident->status) === $status->name ? 'selected' : '' }}> {{ $status->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -113,4 +115,27 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            $('#type').select2({
+                placeholder: 'Select incident type',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#location').select2({
+                placeholder: 'Select incident of location',
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#status').select2({
+                placeholder: 'Select incident status',
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
 @endsection

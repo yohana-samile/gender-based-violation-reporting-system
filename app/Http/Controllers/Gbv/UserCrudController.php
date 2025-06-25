@@ -46,7 +46,7 @@ class UserCrudController extends Controller
         $validated = $request->validated();
         try {
             $user = $this->user_repository->store($validated);
-            return redirect()->route('gbv.user.show', $user->id)->with('success', 'User Registered Successfully');
+            return redirect()->route('gbv.user.show', $user->uid)->with('success', 'User Registered Successfully');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error creating User: '.$e->getMessage());
         }

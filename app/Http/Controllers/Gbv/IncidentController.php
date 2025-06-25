@@ -9,6 +9,7 @@ use App\Http\Resources\IncidentResource;
 use App\Models\SupportService;
 use App\Models\System\Code;
 use App\Models\System\CodeValue;
+use App\Models\System\District;
 use App\Repositories\Frontend\Eloquent\IncidentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,8 +31,13 @@ class IncidentController extends Controller
 
     public function create()
     {
-        $codeId = Code::query()->where('name', 'Case Type')->value('id');
-        $data['incidentTypes'] = CodeValue::getIncidentType($codeId);
+        $codeTypeId = Code::query()->where('name', 'Case Type')->value('id');
+        $codeGenderId = Code::query()->where('name', 'Gender')->value('id');
+        $codeVulnerability = Code::query()->where('name', 'Case Vulnerability')->value('id');
+        $data['incidentTypes'] = CodeValue::getIncidentType($codeTypeId);
+        $data['locations'] = District::all();
+        $data['vulnerabilities'] = CodeValue::getIncidentVulnerabilities($codeVulnerability);
+        $data['genders'] = CodeValue::getIncidentGender($codeGenderId);
         return view('pages.incidents.create', $data);
     }
 
@@ -41,7 +47,7 @@ class IncidentController extends Controller
         try {
             $incident = $this->incidentRepository->create($validated);
             Cache::forget('dashboard_metrics');
-            return redirect()->route('gbv.incident.show', $incident->id)->with('success', 'Incident reported successfully');
+            return redirect()->route('gbv.incident.show', $incident->uid)->with('success', 'Incident reported successfully');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error creating incident: '.$e->getMessage());
         }
@@ -60,6 +66,8 @@ class IncidentController extends Controller
     {
         $codeId = Code::query()->where('name', 'Case Type')->value('id');
         $caseStatus = Code::query()->where('name', 'Case Status')->value('id');
+
+        $data['locations'] = District::all();
         $data['incident'] = $this->incidentRepository->getIncidentByUid($uid);
         $data['supportServices'] = SupportService::all();
         $data['incidentTypes'] = CodeValue::getIncidentType($codeId);
