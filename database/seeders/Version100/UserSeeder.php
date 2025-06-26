@@ -14,17 +14,22 @@ class UserSeeder extends Seeder
             $this->disableForeignKeys("users");
             $userRepo = new \App\Repositories\Access\UserRepository();
             $count = $userRepo->query()->count();
+            $email = "ameena@gbv.com";
+            $name = "Ameena Amina";
+            $role = "administration";
+            $password = 12345678;
+
             if($count == 0) {
-                $user = $userRepo->query()->updateOrCreate(['email' => 'samileking9@gmail.com'],[
-                    "name" => "King Samile",
+                $user = $userRepo->query()->updateOrCreate(['email' => $email],[
+                    "name" => $name,
                     "is_active" => true,
                     "is_super_admin" => true,
                     "email_verified_at" => now(),
-                    "email" => "samileking9@gmail.com",
-                    "password" => Hash::make('12345678'),
+                    "email" => $email,
+                    "password" => Hash::make($password),
                 ]);
 
-                $role = Role::getRoleByName('Administration');
+                $role = Role::getRoleByName($role);
                 if ($role) {
                     $user->roles()->sync([$role->id]);
                 }
@@ -34,8 +39,8 @@ class UserSeeder extends Seeder
                 }
             }
             else{
-                $user = User::getUserIdByEmail('samileking9@gmail.com');
-                $role = Role::getRoleByName('Administration');
+                $user = User::getUserIdByEmail($email);
+                $role = Role::getRoleByName($role);
                 $permission = Permission::getPermissionByName('all_functions');
 
                 if ($role) {

@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('title', __('label.administrator.system.audits.my_logs'))
+@extends('layouts.frontend.app')
+@section('title', __('My logs'))
 
 @push('after-styles')
     <style>
@@ -9,21 +9,22 @@
 @section('content')
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <h1 class="text-xl font-bold">
-            {{ __('label.administrator.system.audits.my_logs') }}
-            <span class="mt-2 text-gray-600 dark:text-gray-400 entriesCount text-sm"></span>
+            {{ __('My logs') }}
+            <span class="mt-2 text-gray-600 entriesCount text-sm"></span>
         </h1>
 
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 nextbyte-table" id="my-logs-table">
-            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 nextbyte-table"
+               id="my-logs-table">
+            <thead class="text-xs text-gray-700 uppercase">
             <tr>
-                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
-                    {{__('label.event')}}
+                <th scope="col" class="px-6 py-3 bg-gray-50">
+                    {{__('event')}}
                 </th>
-                <th scope="col" class="px-6 py-3 bg-gray-50 dark:bg-gray-800">
-                    {{__('label.created_at')}}
+                <th scope="col" class="px-6 py-3 bg-gray-50">
+                    {{__('Created_at')}}
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    {{__('label.ip_address')}}
+                    {{__('Ip_address')}}
                 </th>
             </tr>
             </thead>
@@ -53,7 +54,7 @@
                 ajax: '{{ route('frontend.my_logs.get_all_for_dt') }}',
 
                 columns: [
-                    { data: 'event', name: 'audits.event', orderable: true, searchable: true },
+                    {data: 'event', name: 'audits.event', orderable: true, searchable: true},
                     {
                         data: 'created_at',
                         name: 'audits.created_at',
@@ -68,24 +69,23 @@
                             });
                         }
                     },
-                    { data: 'ip_address', name: 'audits.ip_address', orderable: false, searchable: true },
+                    {data: 'ip_address', name: 'audits.ip_address', orderable: false, searchable: true},
                 ],
 
-                fnRowCallback: function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     const url = `{{ route('frontend.my_logs.profile', ['audit' => '__AUDIT_UID__']) }}`.replace('__AUDIT_UID__', aData.id);
 
-                    $(nRow).click(function() {
+                    $(nRow).click(function () {
                         document.location.href = url;
-                    }).hover(function() {
-                        $(this).css('cursor','pointer');
-                    }, function() {
-                        $(this).css('cursor','auto');
+                    }).hover(function () {
+                        $(this).css('cursor', 'pointer');
+                    }, function () {
+                        $(this).css('cursor', 'auto');
                     });
                 },
 
                 pagingType: "full_numbers",
                 drawCallback: function (settings) {
-                    applyDarkModeToDataTable();
                     let info = settings.oInstance.api().page.info();
                     let entriesCount = document.querySelector(".entriesCount");
                     if (entriesCount) {

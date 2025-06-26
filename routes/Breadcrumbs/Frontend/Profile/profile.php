@@ -1,6 +1,6 @@
 <?php
 Breadcrumbs::for('frontend.profile.show', function ($breadcrumbs) {
     $breadcrumbs->parent('home');
-    $breadcrumbs->push(__('label.action_crud.profile'), route('frontend.profile.show'));
+    $breadcrumbs->push(__('Profile'), route('frontend.profile.show'));
 });
 

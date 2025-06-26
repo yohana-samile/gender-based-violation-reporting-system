@@ -21,12 +21,16 @@ class UserRepository extends  BaseRepository {
 
     protected function createNewUser(array $input)
     {
+        $role = Role::getRoleById($input['role_id']);
+        $reporter = $role && $role->name === 'reporter';
+
         return $this->query()->create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
             'is_active' => $input['is_active'] ?? true,
             'is_super_admin' => $input['is_super_admin'] ?? false,
+            'is_reporter' => $reporter,
             "email_verified_at" => now(),
         ]);
     }

@@ -9,11 +9,6 @@ use Illuminate\Support\Str;
 class RolesTableSeeder extends Seeder
 {
     use DisableForeignKeys, TruncateTable;
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     */
     public function run() {
         $exists = Role::query()->count();
         if($exists == 0){
@@ -26,7 +21,7 @@ class RolesTableSeeder extends Seeder
 
             foreach ($roles as $role) {
                 Role::updateOrCreate(
-                    ['name' => strtolower($role['name'])],
+                    ['name' => $role['name']],
                     array_merge($role, [
                         'isactive' => 1,
                         'guard_name' => 'api',

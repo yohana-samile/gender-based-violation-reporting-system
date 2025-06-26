@@ -20,33 +20,34 @@ class PermissionRoleTableSeeder extends Seeder
         $this->disableForeignKeys("permission_role");
         $this->delete('permission_role');
 
-        $this->assignPermissionsToRole('Administration', Permission::query()->pluck('id')->toArray());
-        $this->assignPermissionsToRole('case_worker', [
-            'case_worker'
-        ]);
-        $this->assignPermissionsToRole('reporter', [
-            'reporter'
-        ]);
-        $this->assignPermissionsToRole('law_enforcement', [
-            'law_enforcement'
-        ]);
+        $this->assignPermissionsToRole('administration', Permission::query()->pluck('id')->toArray());
+        $this->assignPermissionsToRole('case_worker', ['case_worker']);
+        $this->assignPermissionsToRole('reporter', ['reporter']);
+        $this->assignPermissionsToRole('law_enforcement', ['law_enforcement']);
         $this->enableForeignKeys('permission_role');
     }
 
-    protected function assignPermissionsToRole($roleName, $permissionNames)
+    protected function assignPermissionsToRole($roleName, $permissionNames): void
     {
         $roleId = Role::query()->where('name', $roleName)->value('id');
-        if (!$roleId) {
-            return;
-        }
+        if (!$roleId) return;
+
         if (is_array($permissionNames)) {
-            $permissionIds = DB::table('permissions')
-                ->whereIn('name', $permissionNames)
-                ->pluck('id')
-                ->toArray();
+            $permissionIds = ctype_digit(implode('', $permissionNames)) || is_int($permissionNames[0])
+                ? $permissionNames
+                : DB::table('permissions')
+                    ->whereIn('name', $permissionNames)
+                    ->pluck('id')
+                    ->toArray();
         } else {
-            $permissionIds = $permissionNames;
+            $permissionIds = is_numeric($permissionNames)
+                ? [$permissionNames]
+                : DB::table('permissions')
+                    ->where('name', $permissionNames)
+                    ->pluck('id')
+                    ->toArray();
         }
+
         $insertData = array_map(function($permissionId) use ($roleId) {
             return [
                 'permission_id' => $permissionId,

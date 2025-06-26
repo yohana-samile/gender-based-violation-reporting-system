@@ -1,17 +1,12 @@
 <?php
 
 namespace App\Models\Access\Attribute;
-
-/**
- * Class RoleAttribute
- * @package App\Models\Access\Attribute
- */
 trait RoleAttribute
 {
 
     public function setNameAttribute($value)
     {
-        $this->attributes['name'] = ucwords($value);
+        $this->attributes['name'] = strtolower($value);
     }
 
     /*Get Is Administrative label*/
@@ -30,13 +25,6 @@ trait RoleAttribute
         return $this->isadmin == 1;
     }
 
-    /*Edit Button*/
-    public function getEditButtonAttribute() {
-        return '<a href="' . route('access.role.edit', $this->id) . '"  class="btn btn-xs btn-primary" ><i class="icon fa fa-edit" data-toggle="tooltip" data-placement="top" title="' . trans('buttons.general.crud.edit') . '"></i>'.' '. trans('buttons.general.crud.edit').'</a> ';
-
-    }
-
-
     public function checkIfCanBeDeleted() {
         if ($this->users || $this->permissions) {
             return false;
@@ -45,5 +33,4 @@ trait RoleAttribute
             return true;
         }
     }
-
 }

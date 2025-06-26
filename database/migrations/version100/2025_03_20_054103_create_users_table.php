@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_super_admin')->default(false);
+            $table->boolean('is_reporter')->default(false);
             $table->string('password');
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();

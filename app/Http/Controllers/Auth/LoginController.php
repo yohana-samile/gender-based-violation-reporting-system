@@ -140,7 +140,7 @@ class LoginController extends Controller {
     protected function redirectTo() {
         $user = user();
         if ($user) {
-            $this->redirectTo = '/gbv/layouts/dashboard';
+            $this->redirectTo = $user->is_reporter ? '/frontend/layouts/dashboard' : '/backend/layouts/dashboard';
         } else {
             $this->redirectTo = '/login';
         }

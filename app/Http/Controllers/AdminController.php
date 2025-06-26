@@ -9,7 +9,8 @@ class AdminController extends Controller
         if (!Auth::check()) {
             return view('auth.login');
         }
-        $dashboardRoute = '/gbv/layouts/dashboard';
+        $user = user();
+        $dashboardRoute = $user->is_reporter ? '/frontend/layouts/dashboard' : '/backend/layouts/dashboard';
         return redirect($dashboardRoute);
     }
 

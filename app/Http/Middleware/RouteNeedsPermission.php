@@ -37,10 +37,10 @@ class RouteNeedsPermission
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => trans('auth.general_error'),
+                    'message' => 'You do not have sufficient permission to perform the requested action.',
                 ], 403);
             }
-            return redirect()->back()->with('error', trans('auth.general_error'));
+            return redirect()->back()->with('error', 'You do not have sufficient permission to perform the requested action.');
         }
         return $next($request);
     }

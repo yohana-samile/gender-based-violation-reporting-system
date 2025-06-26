@@ -6,7 +6,6 @@
     ], function() {
 
         Route::group([ 'prefix' => 'profile',  'as' => 'profile.'], function() {
-            Route::get('/profile-show', 'SettingController@profileShow')->name('show');
-            Route::post('/update-password', 'SettingController@updatePassword')->name('update.password');
+            Route::get('/profile-show', 'MyLogsController@profileShow')->name('show');
         });
-    })->middleware('access.routeNeedsPermission:manage_emails');
+    })->middleware('access.routeNeedsPermission:reporter');
