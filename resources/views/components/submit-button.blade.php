@@ -3,11 +3,11 @@
         @if ($showClose)
             @if ($closeType === 'modal')
                 <button type="button" onclick="closeModal('{{ $closeTarget }}')" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mb-3">
-                    <i class="fas fa-times"></i> {{ __('label.action_crud.close') }}
+                    <i class="fas fa-times"></i> {{ __('Close') }}
                 </button>
             @elseif ($closeType === 'route' && $closeTarget)
                 <a href="{{ $closeTarget }}" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mb-3">
-                    <i class="fas fa-home"></i> {{ __('label.action_crud.back') }}
+                    <i class="fas fa-home"></i> {{ __('Back') }}
                 </a>
             @endif
         @endif
