@@ -13,9 +13,9 @@ class UserRepository extends  BaseRepository {
         return DB::transaction(function() use($input) {
             $user = $this->createNewUser($input);
             if ($user->wasRecentlyCreated) {
-                $this->assignRolesAndPermissions($user);
+                $this->assignRolesAndPermissions($user, $input['role_id']);
             }
-            return true;
+            return $user;
         });
     }
 
@@ -25,23 +25,23 @@ class UserRepository extends  BaseRepository {
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
-            "is_active" => true,
-            "is_super_admin" => false,
+            'is_active' => $input['is_active'] ?? true,
+            'is_super_admin' => $input['is_super_admin'] ?? false,
             "email_verified_at" => now(),
         ]);
     }
 
-    protected function assignRolesAndPermissions($user)
+    protected function assignRolesAndPermissions(User $user, int $roleId):bool
     {
-        $role = Role::getRoleByName('Reporter');
+        $role = Role::getRoleById($roleId);
         if (!$role) {
-            return false;
+            throw new \InvalidArgumentException("Role with ID {$roleId} not found");
         }
         $user->roles()->sync([$role->id]);
-        $permission = Permission::getPermissionByName('reporter');
-        if ($permission) {
-            $user->permissions()->sync([$permission->id]);
+        if ($role->permissions->isNotEmpty()) {
+            $user->permissions()->sync($role->permissions->pluck('id')->toArray());
         }
+        return true;
     }
 
     public function update($userId, array $input){
@@ -93,7 +93,7 @@ class UserRepository extends  BaseRepository {
     }
 
     public function getAllForDt() {
-        return $this->query()->where('is_super_admin', false)->orderBy('created_at', 'desc')->get();
+        return $this->query()->orderBy('created_at', 'desc')->get();
     }
 
     public function fetchUserByUid($userUid) {

@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Gbv;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\CreateUserRequest as StoreRequest;
+use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\User\UpdateUserRequest as UpdateRequest;
 use App\Models\Access\Permission;
 use App\Models\Access\Role;
@@ -27,7 +27,19 @@ class UserCrudController extends Controller
     public function fetchUser()
     {
         $users = $this->user_repository->getAllForDt();
-        return response(['data' => $users]);
+        return response()->json([
+            'data' => $users->map(function($user, $index) {
+                return [
+                    'DT_RowIndex' => $index + 1,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'is_active' => $user->is_active,
+                    'is_super_admin' => $user->is_super_admin,
+                    'uid' => $user->uid,
+                    'show_url' => route('backend.show.user', $user->uid),
+                ];
+            })
+        ]);
     }
 
     public function fetchAdminUser()
@@ -38,15 +50,18 @@ class UserCrudController extends Controller
 
     public function create()
     {
-        return view('pages.user.create');
+        $data['roles'] = Role::query()->get();
+        $data['adminRoleId'] = Role::getRoleByName('Administration')->value('id');
+        return view('pages.user.create', $data);
     }
 
-    public function store(StoreRequest $request)
+    public function store(CreateUserRequest $request): \Illuminate\Http\RedirectResponse
     {
-        $validated = $request->validated();
         try {
+            $validated = $request->validated();
             $user = $this->user_repository->store($validated);
-            return redirect()->route('gbv.user.show', $user->uid)->with('success', 'User Registered Successfully');
+
+            return redirect()->route('backend.show.user', $user->uid)->with('success', 'User Registered Successfully');
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Error creating User: '.$e->getMessage());
         }
@@ -55,81 +70,40 @@ class UserCrudController extends Controller
     public function update(UpdateRequest $request, $user)
     {
         $input = $request->all();
-        $status = 200;
-        $message = "User Details Updated Successfully";
-        DB::beginTransaction();
-
         try {
             $response = $this->user_repository->update($user, $input);
             if ($response === false) {
-                return response()->json([
-                    'status' => 403,
-                    'message' => "Fail to update user",
-                ], 403);
+                return back()->with('error', 'Fail to update user');
             }
+            return redirect()->back()->with('success', 'User Details Updated Successfully');
 
-            DB::commit();
-            return response()->json([
-                'status' => $status,
-                'message' => $message,
-            ], 200);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            $status = 500;
-            $message = "Server Error, Try Again";
-            \Log::error("Error occurred when updating user: ", ['exception' => $th]);
-
-            return response()->json([
-                'status' => $status,
-                'message' => $message,
-            ], 500);
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', '"Error occurred when updating user: '.$e->getMessage());
         }
     }
 
     public function deleteUser($user)
     {
-        $status = 200;
-        $message = "User Deleted Successfully";
-        $destination = route('gbv.user');
-        DB::beginTransaction();
-
         try {
             $response = $this->user_repository->delete($user);
             if ($response === false) {
-                return response()->json([
-                    'status' => 403,
-                    'message' => "Fail to delete user",
-                ], 403);
+                return back()->with('error', 'Error deleting user');
             }
-
-            DB::commit();
-            return response()->json([
-                'status' => $status,
-                'message' => $message,
-                'url_destination' => $destination
-            ]);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            $status = 500;
-            $message = "Server Error, Try Again";
-            \Log::error("Error occurred when deleting user: ", ['exception' => $th]);
-
-            return response()->json([
-                'status' => $status,
-                'message' => $message,
-            ], 500);
+            return redirect()->route('backend.user')->with('success', 'User Deleted Successfully');
+        } catch (\Exception $e) {
+            return back()->withInput()->with('error', 'Error creating User: '.$e->getMessage());
         }
     }
 
     public function profile($userId)
     {
-        $user = User::with('roles', 'permissions')->findOrFail($userId);
-        return view('pages.user.profile', ['user' => $user]);
+        $user = User::with('roles', 'permissions')->where('uid', $userId)->first();
+        return view('pages.user.profile.profile', ['user' => $user]);
     }
 
     public function edit($userId)
     {
-        $data['user'] = User::with('roles', 'permissions')->findOrFail($userId);
+        $data['user'] = User::with('roles', 'permissions')->where('uid', $userId)->first();
         $data['roles'] = Role::getAllRoles();
         $data['permissions'] = Permission::getAllPermissions();
         return view('pages.user.edit', $data);
@@ -137,15 +111,15 @@ class UserCrudController extends Controller
 
     public function activity($userId)
     {
-        $user = User::with('roles', 'permissions')->findOrFail($userId);
+        $user = User::with('roles', 'permissions')->where('uid', $userId)->first();
         $audits = DB::table('audits')
             ->leftJoin('users', 'audits.user_id', '=', 'users.id')
             ->select('audits.*',
                 DB::raw("CASE
-                    WHEN audits.user_type = 'App\Models\User' THEN users.email
+                    WHEN audits.user_type = 'App\Models\Access\User' THEN users.email
                     ELSE 'Guest User'
                 END as user_email")
-            )->where('users.id', $userId)->orderByDesc('audits.created_at')->get();
+            )->where('users.id', $user->id)->orderByDesc('audits.created_at')->get();
 
         return view('pages.user.activity', compact('user', 'audits'));
     }

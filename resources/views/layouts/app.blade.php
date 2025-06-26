@@ -20,6 +20,7 @@
         <script src="https://cdn.tailwindcss.com"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -264,21 +265,23 @@
 
         <main class="py-6 px-4 sm:px-6 lg:px-8">
             {{ \Diglactic\Breadcrumbs\Breadcrumbs::render() }}
-            @if(session('success'))
-                <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
-                    <p>{{ session('success') }}</p>
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
-                    <p>{{ session('error') }}</p>
-                </div>
-            @endif
-            @if(session('warning'))
-                <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
-                    {{ session('warning') }}
-                </div>
-            @endif
+            <div class="flash-messages">
+                @if(session()->has('success'))
+                    <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                        <p>{{ session('success') }}</p>
+                    </div>
+                @endif
+                @if(session()->has('error'))
+                    <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">
+                        <p>{{ session('error') }}</p>
+                    </div>
+                @endif
+                @if(session()->has('warning'))
+                    <div class="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700">
+                        {{ session('warning') }}
+                    </div>
+                @endif
+            </div>
             @yield('content')
             <x-back-to-top />
         </main>
@@ -335,9 +338,10 @@
         </script>
     @endif
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     @livewireScripts
