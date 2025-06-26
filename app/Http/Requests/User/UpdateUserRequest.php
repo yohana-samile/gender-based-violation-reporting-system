@@ -25,11 +25,18 @@ class UpdateUserRequest extends FormRequest
         return [
             'name' => 'required|min:4|max:255',
             'email' => 'required|email',
-            'is_active' => 'nullable',
             'password' => 'nullable|string|min:6|confirmed',
             'roles' => 'nullable|array',
             'permissions' => 'nullable|array',
+            'is_active' => 'sometimes|boolean',
         ];
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'is_active' => $this->boolean('is_active'),
+        ]);
     }
 
     /**
@@ -40,7 +47,9 @@ class UpdateUserRequest extends FormRequest
     public function attributes()
     {
         return [
-            //
+            'name' => 'full name',
+            'email' => 'email address',
+            'role_id' => 'role',
         ];
     }
 

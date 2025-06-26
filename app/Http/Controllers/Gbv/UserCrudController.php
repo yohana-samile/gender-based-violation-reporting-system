@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Gbv;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\User\CreateUserRequest as StoreRequest;
 use App\Http\Requests\User\UpdateUserRequest as UpdateRequest;
 use App\Models\Access\Permission;
 use App\Models\Access\Role;
@@ -55,7 +55,7 @@ class UserCrudController extends Controller
         return view('pages.user.create', $data);
     }
 
-    public function store(CreateUserRequest $request): \Illuminate\Http\RedirectResponse
+    public function store(StoreRequest $request): \Illuminate\Http\RedirectResponse
     {
         try {
             $validated = $request->validated();

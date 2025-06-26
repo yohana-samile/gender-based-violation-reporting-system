@@ -22,21 +22,3 @@
         </button>
     </div>
 </div>
-
-{{--usage --}}
-{{--<x-submit-button icon="fas fa-save" label="label.action_crud.save" />--}}
-{{--<x-submit-button class="bg-red-500 text-white px-4 py-2 rounded mt-4 mb-3 float-end" icon="fas fa-save" label="label.resynchronization" />--}}
-
-{{--<x-submit-button--}}
-{{--    icon="fas fa-edit"--}}
-{{--    label="label.action_crud.update"--}}
-{{--    :showClose="true"--}}
-{{--    closeType="modal"--}}
-{{--    closeTarget="editModalId" />--}}
-
-{{--<x-submit-button--}}
-{{--    icon="fas fa-check"--}}
-{{--    label="Submit and Go Back"--}}
-{{--    :showClose="true"--}}
-{{--    closeType="route"--}}
-{{--    closeTarget="home" />--}}
