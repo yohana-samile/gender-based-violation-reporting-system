@@ -112,7 +112,7 @@
 
                         <x-nav-link href="{{ route('backend.user') }}" :active="request()->routeIs('backend.user')" class="flex items-center py-2 px-3 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
                             <i class="fas fa-users mr-3 text-gray-600 dark:text-gray-300"></i>
-                            {{ __('Reporter') }}
+                            {{ __('Users') }}
                         </x-nav-link>
                     @endif
                 </div>
