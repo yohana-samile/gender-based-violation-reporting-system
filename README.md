@@ -3,6 +3,9 @@
 pull project from
 https://github.com/yohana-samile/gender-based-violation-reporting-system
 
+![Screenshot from 2025-06-26 17-40-07](https://github.com/user-attachments/assets/0021d4cf-d2fa-4cb1-8553-706083e344de)
+
+
 ## how to run this project
 1. you need to have Xampp server or ngnix server based on your choice
 2. extract the zipped file you downloaded in the link above
