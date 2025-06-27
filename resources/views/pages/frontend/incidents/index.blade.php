@@ -36,48 +36,42 @@
                     </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse ($incidents as $incident)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">
-                                    <a href="{{ route('frontend.incident.show', $incident->uid) }}"
-                                       class="text-blue-600 hover:text-blue-800">
-                                        {{ $incident->title }}
-                                    </a>
-                                </div>
-                                <div class="text-sm text-gray-500">
-                                    {{ Str::limit($incident->description, 50) }}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
-                                        {{ ucfirst(str_replace('_', ' ', $incident->type)) }}
-                                    </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                        {{ $incident->status === 'Reported' ? 'bg-yellow-100 text-yellow-800' : '' }}
-                                        {{ $incident->status === 'Under investigation' ? 'bg-blue-100 text-blue-800' : '' }}
-                                        {{ $incident->status === 'Resolved' ? 'bg-green-100 text-green-800' : '' }}
-                                        {{ $incident->status === 'Closed' ? 'bg-gray-100 text-gray-800' : '' }}">
-                                        {{ ucfirst(str_replace('_', ' ', $incident->status)) }}
-                                    </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $incident->occurred_at->format('M d, Y') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="{{ route('frontend.incident.show', $incident->uid) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                                No incidents found.
-                            </td>
-                        </tr>
-                    @endforelse
+                        @foreach($incidents as $incident)
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">
+                                        <a href="{{ route('frontend.incident.show', $incident->uid) }}"
+                                           class="text-blue-600 hover:text-blue-800">
+                                            {{ $incident->title }}
+                                        </a>
+                                    </div>
+                                    <div class="text-sm text-gray-500">
+                                        {{ Str::limit($incident->description, 50) }}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                                class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">
+                                            {{ ucfirst(str_replace('_', ' ', $incident->type)) }}
+                                        </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                            {{ $incident->status === 'reported' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                            {{ $incident->status === 'under_investigation' ? 'bg-blue-100 text-blue-800' : '' }}
+                                            {{ $incident->status === 'resolved' ? 'bg-green-100 text-green-800' : '' }}
+                                            {{ $incident->status === 'closed' ? 'bg-gray-100 text-gray-800' : '' }}">
+                                            {{ ucfirst(str_replace('_', ' ', $incident->status)) }}
+                                        </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {{ $incident->occurred_at->format('M d, Y') }}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="{{ route('frontend.incident.show', $incident->uid) }}" class="text-blue-600 hover:text-blue-900 mr-3">View</a>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

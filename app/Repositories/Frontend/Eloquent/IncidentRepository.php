@@ -121,7 +121,6 @@ class IncidentRepository implements IncidentRepositoryInterface
     }
 
 
-
     public function getByReporter(int $reporterId): Collection
     {
         return Incident::query()->where('reporter_id', $reporterId)->with(['victims', 'perpetrators'])->get();

@@ -1,7 +1,7 @@
 <?php
 Breadcrumbs::for('frontend.incident.index', function ($breadcrumbs) {
     $breadcrumbs->parent('home');
-    $breadcrumbs->push(__('Incident'), route('gbv.incident.index'));
+    $breadcrumbs->push(__('Incident'), route('frontend.incident.index'));
 });
 
 Breadcrumbs::for('frontend.incident.create',function($breadcrumbs){

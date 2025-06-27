@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserRequest;
+use App\Models\Access\Role;
 use App\Providers\RouteServiceProvider;
 use App\Repositories\Backend\UserRepository;
 
@@ -23,15 +24,13 @@ class RegisterController extends Controller
 
     public function signup(UserRequest $request)
     {
-        return $this->create($request);
-    }
-
-    protected function create(UserRequest $request)
-    {
-        $input = $request->validated();
+        $validatedData = $request->validated();
 
         try {
-            $user = $this->userRepository->store($input);
+            $role = Role::getRoleByName('reporter');
+            $validatedData['role_id'] = $role->id;
+            $validatedData['is_reporter'] = true;
+            $user = $this->userRepository->store($validatedData);
 
             if ($user) {
                 return response()->json([
@@ -41,16 +40,13 @@ class RegisterController extends Controller
                 ], 201);
             }
         } catch (\Exception $e) {
+            \Log::info("error: " . $e);
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to register user. Please try again.'
             ], 500);
         }
-
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Registration failed'
-        ], 400);
     }
 }
 
