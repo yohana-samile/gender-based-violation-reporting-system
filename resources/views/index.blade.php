@@ -14,10 +14,18 @@
     <header class="bg-white shadow">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-blue-600">Gender-Based Violations Reporting System</h1>
-            <div>
-                <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 mr-4 font-medium">Login</a>
-                <a href="{{ route('register') }}" class="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">Register</a>
-            </div>
+            @auth
+                <div>
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-blue-600 mr-4 font-medium">My Dashboard</a>
+                </div>
+            @endauth
+
+            @guest
+                <div>
+                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-blue-600 mr-4 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700">Register</a>
+                </div>
+            @endguest
         </div>
     </header>
 

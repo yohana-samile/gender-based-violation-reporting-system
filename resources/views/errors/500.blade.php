@@ -14,12 +14,12 @@
             <div class="hidden sm:block xl:col-span-2">
                 <div class="flex flex-col h-full justify-between">
                     <div>
-                        <a href="{{ url('/') }}">
-                            <img src="{{ URL::asset('asset/img/sbg.jpg') }}" alt="Logo" class="h-8">
+                        <a href="{{ route('home') }}">
+                            <img src="{{ asset('asset/img/sbg.jpg') }}" alt="Logo" class="h-8">
                         </a>
                     </div>
                     <div class="text-center my-auto">
-                        <img src="{{ URL::asset('/asset/img/sbg.jpg') }}" alt="" class="w-full max-w-xs mx-auto">
+                        <img src="{{ asset('/asset/img/sbg.jpg') }}" alt="" class="w-full max-w-xs mx-auto">
                     </div>
                     <div class="text-center mt-auto">
                         <p class="text-sm">© 2025 GBV Reporting System™. All Rights Reserved.</p>
@@ -29,18 +29,18 @@
             <div class="mx-auto xl:col-span-1">
                 <div class="bg-white shadow-lg rounded-lg p-6 lg:p-8">
                     <div class="text-center">
-                        <a href="{{ url('/') }}" class="block mb-6">
-                            <img src="{{ URL::asset('/asset/img/sbg.jpg') }}" class="h-10 mx-auto" alt="GBV Logo">
+                        <a href="{{ route('home') }}" class="block mb-6">
+                            <img src="{{ asset('/asset/img/sbg.jpg') }}" class="h-10 mx-auto" alt="GBV Logo">
                         </a>
                     </div>
                     <div class="text-center px-6">
-                        <img src="{{ URL::asset('asset/img/auth/500.png') }}" class="w-full max-w-xs mx-auto" alt="500 Error">
+                        <img src="{{ asset('asset/img/auth/500.png') }}" class="w-full max-w-xs mx-auto" alt="500 Error">
                     </div>
                     <div class="mt-6 text-center">
                         <h4 class="text-2xl font-semibold uppercase">Internal Server Error</h4>
                         <p class="text-gray-600 mt-2">It seems you’ve hit a dead end. Let’s get you back on track.</p>
                         <div class="mt-4">
-                            <a href="{{ url('/') }}" class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition inline-flex items-center">
+                            <a href="{{ route('home') }}" class="bg-blue-600 text-white px-5 py-2 rounded-lg shadow hover:bg-blue-700 transition inline-flex items-center">
                                 <i class="mdi mdi-home mr-2"></i> Back to home
                             </a>
                         </div>

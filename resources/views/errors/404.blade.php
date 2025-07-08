@@ -14,7 +14,7 @@
             <div class="hidden sm:block xl:col-span-2">
                 <div class="flex flex-col h-full justify-between">
                     <div>
-                        <a href="{{ url('/') }}">
+                        <a href="{{ route('home') }}">
                             <img src="{{ asset('asset/img/sbg.jpg') }}" alt="Logo" class="h-8">
                         </a>
                     </div>
@@ -29,7 +29,7 @@
             <div class="flex justify-center">
                 <div class="bg-white rounded-lg shadow-lg p-6 lg:p-10">
                     <div class="text-center">
-                        <a href="{{ url('/') }}">
+                        <a href="{{ route('home') }}">
                             <img src="{{ asset('asset/img/sbg.jpg') }}" alt="gbv-logo" class="h-20 mx-auto">
                         </a>
                     </div>
@@ -39,7 +39,7 @@
                     <div class="mt-6 text-center">
                         <h4 class="text-2xl font-bold uppercase">Oops, page not found</h4>
                         <p class="text-gray-600 mt-3">It seems you’ve hit a dead end. Let’s get you back on track.</p>
-                        <a href="{{ url('/') }}" class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+                        <a href="{{ route('home') }}" class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
                             <i class="mdi mdi-home mr-2"></i>Back to home
                         </a>
                     </div>
