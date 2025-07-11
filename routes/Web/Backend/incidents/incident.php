@@ -15,5 +15,7 @@ Route::group([
         Route::post('/update-status/{incident}', 'IncidentController@updateStatus')->name('update-status');
         Route::post('/attach-services/{incident}', 'IncidentController@attachServices')->name('attach-services');
         Route::get('/reports', 'IncidentController@reports')->name('reports');
+
+        Route::get('/view/{incident}', 'IncidentController@view')->name('view');
     });
 })->middleware('access.routeNeedsPermission:case_worker');

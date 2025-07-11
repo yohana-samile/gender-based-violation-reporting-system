@@ -229,8 +229,7 @@
                                                             <i class="far fa-file-alt text-gray-500"></i>
                                                         @endif
                                                     </div>
-                                                    <a href="{{ Storage::url($evidence->file_path) }}" target="_blank"
-                                                       class="text-blue-600 hover:text-blue-800 text-sm flex items-center">
+                                                    <a href="{{ route('backend.incident.view', $evidence->uid) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm flex items-center">
                                                         <i class="fas fa-external-link-alt mr-1 text-xs"></i> View
                                                     </a>
                                                 </div>

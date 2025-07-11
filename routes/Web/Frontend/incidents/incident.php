@@ -11,5 +11,7 @@ Route::group([
         Route::get('/{incident}', 'IncidentController@show')->name('show');
         Route::get('/edit/{incident}', 'IncidentController@edit')->name('edit');
         Route::put('/{incident}', 'IncidentController@update')->name('update');
+
+        Route::get('/view/{incident}', 'IncidentController@view')->name('view');
     });
 })->middleware('access.routeNeedsPermission:reporter');

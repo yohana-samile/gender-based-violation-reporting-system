@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Incident\StoreIncidentRequest;
 use App\Http\Requests\Incident\UpdateIncidentRequest;
 use App\Http\Resources\IncidentResource;
+use App\Models\Evidence;
 use App\Models\SupportService;
 use App\Models\System\Code;
 use App\Models\System\CodeValue;
@@ -14,6 +15,7 @@ use App\Repositories\Frontend\Eloquent\IncidentRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 class IncidentController extends Controller
 {
@@ -165,6 +167,24 @@ class IncidentController extends Controller
         }
     }
 
+    public function view($uid)
+    {
+        $evidence = Evidence::query()->where('uid', $uid)->first();
+        if (!$evidence->file_path) {
+            redirect()->back()->with('error', "No attachment found");
+        }
+        logger("file ". $evidence->file_path);
+        if (!Storage::disk('public')->exists($evidence->file_path)) {
+            abort(404, 'File not found');
+        }
+
+        $mimeType = Storage::disk('public')->mimeType($evidence->file_path);
+        $fileContents = Storage::disk('public')->get($evidence->file_path);
+
+        return response($fileContents, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', 'inline; filename="' . basename($evidence->file_path) . '"');
+    }
 
     public function getByStatus(string $status): JsonResponse
     {

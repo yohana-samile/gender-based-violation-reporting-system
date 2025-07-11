@@ -9,7 +9,7 @@
 </head>
 <body lang="en" class="h-full bg-gray-100">
 <section class="flex items-center justify-center min-h-screen p-4">
-    <div class="w-full max-w-5xl bg-cover bg-center p-6 lg:p-8 rounded-lg shadow-lg" style="background-image: url('/asset/img/new_logo_web.png');">
+    <div class="w-full max-w-5xl bg-cover bg-center p-6 lg:p-8 rounded-lg shadow-lg" style="background-image: url('/asset/img/sbg.jpg');">
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-center">
             <div class="hidden sm:block xl:col-span-2">
                 <div class="flex flex-col h-full justify-between">
