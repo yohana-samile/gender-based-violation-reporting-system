@@ -14,6 +14,7 @@ class UserRepository extends  BaseRepository {
             $user = $this->createNewUser($input);
             if ($user->wasRecentlyCreated) {
                 $this->assignRolesAndPermissions($user, $input['role_id']);
+                $user->specializations()->sync($input['specialist_id'] ?? []);
             }
             return $user;
         });
@@ -24,6 +25,11 @@ class UserRepository extends  BaseRepository {
         $role = Role::getRoleById($input['role_id']);
         $reporter = $role && $role->name === 'reporter';
 
+        if (!in_array($role->name, ['administration', 'reporter']) && empty($input['specialist_id'])) {
+            throw new \Exception("Specialist selection is required for this role.");
+        }
+        $is_specialist = isset($input['specialist_id']) && is_array($input['specialist_id']) && count($input['specialist_id']) > 0;
+
         return $this->query()->create([
             'name' => $input['name'],
             'email' => $input['email'],
@@ -31,6 +37,7 @@ class UserRepository extends  BaseRepository {
             'is_active' => $input['is_active'] ?? true,
             'is_super_admin' => $input['is_super_admin'] ?? false,
             'is_reporter' => $reporter,
+            'is_specialist' => $is_specialist,
             "email_verified_at" => now(),
         ]);
     }
@@ -97,14 +104,14 @@ class UserRepository extends  BaseRepository {
     }
 
     public function getAllForDt() {
-        return $this->query()->orderBy('created_at', 'desc')->get();
+        return $this->query()->with('specializations')->orderBy('created_at', 'desc')->get();
     }
 
     public function fetchUserByUid($userUid) {
-        return $this->query()->where('uid', $userUid)->first();
+        return $this->query()->with('specializations')->where('uid', $userUid)->first();
     }
 
     public function getAdminUsers() {
-        return $this->query()->where('admin_id', user_id())->orderBy('created_at', 'desc')->get();
+        return $this->query()->where('admin_id', user_id())->with('specializations')->orderBy('created_at', 'desc')->get();
     }
 }

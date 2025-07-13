@@ -62,4 +62,9 @@ class Incident extends BaseModel
             ->withPivot('notes')
             ->withTimestamps();
     }
+
+    public function specialist()
+    {
+        return $this->belongsTo(User::class, 'specialist_id');
+    }
 }

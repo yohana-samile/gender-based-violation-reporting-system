@@ -6,6 +6,7 @@ use App\Models\Access\Permission;
 use App\Models\Access\Role;
 use App\Models\CaseUpdate;
 use App\Models\Incident;
+use App\Models\Specialist;
 use App\Models\System\CodeValue;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -56,5 +57,15 @@ trait UserRelationship
     public function isCaseWorker()
     {
         return $this->role === 'case_worker';
+    }
+
+    public function specializations()
+    {
+        return $this->belongsToMany(Specialist::class);
+    }
+
+    public function assignedIncidents()
+    {
+        return $this->hasMany(Incident::class, 'specialist_id');
     }
 }

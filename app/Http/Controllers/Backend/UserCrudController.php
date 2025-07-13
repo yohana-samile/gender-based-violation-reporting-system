@@ -6,6 +6,7 @@ use App\Http\Requests\User\UpdateUserRequest as UpdateRequest;
 use App\Models\Access\Permission;
 use App\Models\Access\Role;
 use App\Models\Access\User;
+use App\Models\Specialist;
 use App\Repositories\Backend\UserRepository;
 use Illuminate\Support\Facades\DB;
 
@@ -51,6 +52,7 @@ class UserCrudController extends Controller
     public function create()
     {
         $data['roles'] = Role::query()->get();
+        $data['speclialist'] = Specialist::query()->get();
         $data['adminRoleId'] = Role::getRoleByName('administration')->value('id');
         return view('pages.backend.user.create', $data);
     }

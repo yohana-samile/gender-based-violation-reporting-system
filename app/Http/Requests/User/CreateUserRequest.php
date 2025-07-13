@@ -26,9 +26,11 @@ class CreateUserRequest extends FormRequest
             'name' => 'required|string|min:4|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|confirmed|min:8',
-            'role_id' => 'required|exists:roles,id',
             'is_active' => 'sometimes|boolean',
             'is_super_admin' => 'sometimes|boolean',
+            'role_id' => 'required|exists:roles,id',
+            'specialist_id' => 'required|array',
+            'specialist_id.*' => 'exists:specialists,id',
         ];
     }
 

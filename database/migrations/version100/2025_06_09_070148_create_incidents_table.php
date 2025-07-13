@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('status');
             $table->string('type');
             $table->boolean('is_anonymous')->default(false);
+            $table->foreignId('specialist_id')->nullable()->constrained('users')->onDelete('set null');
+
             $table->string('uid');
             $table->timestamps();
             $table->softDeletes();

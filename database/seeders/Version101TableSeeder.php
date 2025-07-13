@@ -23,6 +23,8 @@ class Version101TableSeeder extends Seeder
         $this->call(StatusTableSeeder::class);
         $this->call(DistrictsTableSeeder::class);
         $this->call(SupportServicesSeeder::class);
+        $this->call(SpecialistSeeder::class);
+        $this->call(UserSpecialistSeeder::class);
 
         $this->call(IncidentSeeder::class);
         DB::commit();

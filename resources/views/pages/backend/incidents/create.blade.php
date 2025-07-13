@@ -181,18 +181,15 @@
                                     <div class="grid grid-cols-1 gap-6">
                                         <!-- File -->
                                         <div>
-                                            <label for="evidence[0][file]"
-                                                   class="block text-sm font-medium text-gray-700">File</label>
-                                            <input type="file" name="evidence[0][file]" id="evidence[0][file]"
+                                            <label for="evidence[0][file]" class="block text-sm font-medium text-gray-700">File</label>
+                                            <input type="file" name="evidence[0][file]" id="evidence[0][file]" required
                                                    class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                                         </div>
 
                                         <!-- Description -->
                                         <div>
-                                            <label for="evidence[0][description]"
-                                                   class="block text-sm font-medium text-gray-700">Description</label>
-                                            <textarea name="evidence[0][description]" id="evidence[0][description]"
-                                                      rows="2"
+                                            <label for="evidence[0][description]" class="block text-sm font-medium text-gray-700">Description</label>
+                                            <textarea name="evidence[0][description]" id="evidence[0][description]" rows="2"
                                                       class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
                                         </div>
                                     </div>

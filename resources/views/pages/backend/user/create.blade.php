@@ -38,8 +38,7 @@
                 </div>
 
                 <div class="mb-4">
-                    <label for="is_super_admin" class="block text-sm font-medium text-gray-700 mb-2">Admin
-                        Privileges</label>
+                    <label for="is_super_admin" class="block text-sm font-medium text-gray-700 mb-2">Admin Privileges</label>
                     <div class="flex items-center">
                         <span class="mr-3 text-sm font-medium text-gray-700">Regular User</span>
                         <label class="relative inline-flex items-center cursor-pointer">
@@ -54,19 +53,37 @@
                     <p class="mt-1 text-xs text-gray-500">Grant super administrator privileges</p>
                 </div>
 
-                <div class="mb-4">
-                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-                    <select name="role_id" id="role"
-                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                        <option value="">Assign role</option>
-                        @foreach($roles as $role)
-                            <option value="{{ $role->id }}"
-                                    @if(old('role_id', isset($user) ? $user->role_id : '') == $role->id) selected @endif
-                                    @if($role->name === 'administration') data-is-admin-role @endif>
-                                {{ $role->name }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="mb-4 flex gap-4">
+                    <!-- Role Dropdown -->
+
+
+                    <div class="w-1/2">
+                        <label for="role_id" class="block text-sm font-medium text-gray-700">Role</label>
+                        <select name="role_id" id="role" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="">Assign role</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->id }}"
+                                        @if(old('role_id', isset($user) ? $user->role_id : '') == $role->id) selected @endif
+                                        @if($role->name === 'administration') data-is-admin-role @endif>
+                                    {{ $role->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+
+                    <div class="w-1/2">
+                        <label for="specialist_id" class="block text-sm font-medium text-gray-700">Specialist</label>
+                        <select name="specialist_id[]" id="specialist_id" multiple
+                                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm bg-white">
+                            @foreach($speclialist as $specialist)
+                                <option value="{{ $specialist->id }}"
+                                        @if(collect(old('specialist_id', isset($user) ? $user->specializations->pluck('id')->toArray() : []))->contains($specialist->id)) selected @endif>
+                                    {{ $specialist->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div class="mb-4">
@@ -132,7 +149,27 @@
 
 @push('after-scripts')
     <script>
+        function toggleSpecialistBasedOnRole() {
+            const specialistSelect = document.getElementById('specialist_id');
+            const selectedRole = $('#role').val();
+            const adminRole = $('option[data-is-admin-role]').val();
+
+            if (selectedRole === adminRole) {
+                specialistSelect.disabled = true;
+                specialistSelect.value = '';
+                specialistSelect.classList.add('bg-gray-100');
+            } else {
+                specialistSelect.disabled = false;
+                specialistSelect.classList.remove('bg-gray-100');
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
+            $('#specialist_id').select2({
+                placeholder: 'Select specialist areas',
+                width: '100%'
+            });
+
             $('#role').select2({
                 placeholder: 'Assign role',
                 allowClear: true,
@@ -160,13 +197,16 @@
             }
 
             syncAdminCheckboxWithRole();
+            toggleSpecialistBasedOnRole();
 
             adminCheckbox.addEventListener('change', function () {
                 syncRoleWithAdminCheckbox();
+                toggleSpecialistBasedOnRole();
             });
 
             roleSelect.on('change', function () {
                 syncAdminCheckboxWithRole();
+                toggleSpecialistBasedOnRole();
             });
 
             $(document).on('select2:open', function () {

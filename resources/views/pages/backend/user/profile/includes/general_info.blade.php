@@ -13,6 +13,20 @@
                     <td class="px-4 py-2 font-medium text-gray-700">Email:</td>
                     <td class="px-4 py-2 text-gray-900">{{ $user->email }}</td>
                 </tr>
+                <tr class="border-t">
+                    <td class="px-4 py-2 font-medium text-gray-700">Specializations:</td>
+                    <td class="px-4 py-2 text-gray-900">
+                        @if($user->specializations->isNotEmpty())
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach($user->specializations as $specialist)
+                                    <li>{{ $specialist->name }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            <span class="text-gray-500">No specialization assigned</span>
+                        @endif
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

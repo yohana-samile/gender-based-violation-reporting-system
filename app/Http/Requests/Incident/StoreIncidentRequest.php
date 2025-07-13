@@ -6,19 +6,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreIncidentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -42,8 +34,8 @@ class StoreIncidentRequest extends FormRequest
             'perpetrators.*.age' => 'nullable|integer|min:0',
             'perpetrators.*.relationship_to_victim' => 'nullable|string|max:255',
             'perpetrators.*.description' => 'nullable|string',
-            'evidence' => 'sometimes|array',
-            'evidence.*.file' => 'sometimes|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+            'evidence' => 'required|array',
+            'evidence.*.file' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
             'evidence.*.description' => 'nullable|string'
         ];
     }

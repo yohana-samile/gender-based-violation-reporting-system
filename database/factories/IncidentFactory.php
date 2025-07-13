@@ -1,6 +1,7 @@
 <?php
 namespace Database\Factories;
 
+use App\Models\Access\User;
 use App\Models\Incident;
 use App\Models\Status;
 use App\Models\System\Code;
@@ -20,6 +21,7 @@ class IncidentFactory extends Factory
         $codeId = Code::query()->where('name', 'Case Type')->value('id');
         $types = CodeValue::query()->where('code_id', $codeId)->pluck('name')->toArray();
         $locations = District::query()->pluck('name')->toArray();
+        $specialist = User::whereHas('specializations')->inRandomOrder()->first();
 
         return [
             'reporter_id' => 1,
@@ -29,6 +31,7 @@ class IncidentFactory extends Factory
             'location' => $this->faker->randomElement($locations) ,
             'type' => $this->faker->randomElement($types),
             'is_anonymous' => $this->faker->boolean(20),
+            'specialist_id' => $specialist ? $specialist->id : null,
             'uid' => Str::uuid()
         ];
     }

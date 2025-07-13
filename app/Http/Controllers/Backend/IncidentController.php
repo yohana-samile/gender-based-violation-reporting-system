@@ -83,15 +83,11 @@ class IncidentController extends Controller
         try {
             $updated = $this->incidentRepository->update($uid, $validated);
             if (!$updated) {
-                return back()
-                    ->withInput()
-                    ->with('error', 'Failed to update incident');
+                return back()->withInput()->with('error', 'Failed to update incident');
             }
             return back()->with('success', 'Incident updated successfully');
         } catch (\Exception $e) {
-            return back()
-                ->withInput()
-                ->with('error', 'Error updating incident: '.$e->getMessage());
+            return back()->withInput()->with('error', 'Error updating incident: '.$e->getMessage());
         }
     }
 

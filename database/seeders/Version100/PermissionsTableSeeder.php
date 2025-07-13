@@ -9,12 +9,7 @@ use Illuminate\Support\Str;
 class PermissionsTableSeeder extends Seeder
 {
     use DisableForeignKeys, TruncateTable;
-    /**
-     * Auto generated seed file
-     *
-     * @return void
-     * @return void
-     */
+
     public function run()
     {
 //        Permission::truncate();

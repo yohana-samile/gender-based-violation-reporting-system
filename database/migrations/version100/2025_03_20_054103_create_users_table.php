@@ -20,9 +20,11 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_super_admin')->default(false);
             $table->boolean('is_reporter')->default(false);
+            $table->boolean('is_specialist')->default(false);
             $table->string('password');
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
+
             $table->string('uid');
             $table->rememberToken();
             $table->timestamps();

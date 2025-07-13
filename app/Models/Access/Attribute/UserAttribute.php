@@ -1,12 +1,36 @@
 <?php
 
 namespace App\Models\Access\Attribute;
-use App\Repositories\Access\UserRepository;
+use App\Models\Access\User;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 trait UserAttribute
 {
+
+    public static function getUserIdByUid($uid)
+    {
+        return self::query()->where('uid', $uid)->first();
+    }
+
+    public static function getUserIdById($id)
+    {
+        return self::query()->where('id', $id)->first();
+    }
+
+    public static function getUserIdByEmail($email)
+    {
+        return User::query()->where('email', $email)->first();
+    }
+
+    public function twoFactorQrCodeSvg()
+    {
+        $google2fa = new Google2FA();
+        return $google2fa->getQRCodeInline(
+            config('app.name'),
+            $this->email,
+            decrypt($this->two_factor_secret)
+        );
+    }
 
     public function getCreatedAtFormattedAttribute()
     {

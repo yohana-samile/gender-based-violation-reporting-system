@@ -1,16 +1,13 @@
 <?php
 namespace App\Repositories\Frontend\Eloquent;
 
+use App\Models\Access\User;
 use App\Models\Incident;
 use App\Models\System\CodeValue;
-use App\Models\Victim;
-use App\Models\Perpetrator;
-use App\Models\Evidence;
 use App\Repositories\Frontend\Interfaces\IncidentRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class IncidentRepository implements IncidentRepositoryInterface
@@ -39,6 +36,30 @@ class IncidentRepository implements IncidentRepositoryInterface
     {
         return DB::transaction(function () use ($data) {
             $caseStatus = CodeValue::query()->where('reference', "CASE01")->value("name");
+
+            $typeToSpecialistMapping = [
+                'Legal' => 'Legal Advisor',
+                'Medical' => 'Medical Specialist',
+                'Counseling' => 'Counselor',
+                'Shelter' => 'Social Worker',
+                'Law Enforcement' => 'Legal Advisor',
+                'Sexual violence' => 'Gender-Based Violence Specialist',
+                'Emotional abuse' => 'Psychologist',
+                'Economic abuse' => 'Social Worker',
+                'Child marriage' => 'Child Protection Specialist',
+                'Female genital mutilation' => 'Medical Specialist',
+                'Trafficking' => 'Human Trafficking Specialist',
+                'Physical violence' => 'Gender-Based Violence Specialist',
+                'Other' => 'General Case Worker'
+            ];
+            $incidentType = CodeValue::query()->where('reference', $data['type'])->value('name');
+            $specialistType = $typeToSpecialistMapping[$incidentType] ?? 'General Case Worker';
+            $specialist = User::query()->whereHas('specializations', function($query) use ($specialistType) {
+                $query->where('name', $specialistType);
+            })->inRandomOrder()->first();
+            if (!$specialist) {
+                $specialist = User::query()->whereHas('specializations')->inRandomOrder()->first();
+            }
             $incident = Incident::create([
                 'reporter_id' => auth()->id(),
                 'title' => $data['title'],
@@ -47,6 +68,7 @@ class IncidentRepository implements IncidentRepositoryInterface
                 'location' => $data['location'],
                 'type' => $data['type'],
                 'status' => $caseStatus,
+                'specialist_id' => $specialist->id ?? null,
                 'is_anonymous' => $data['is_anonymous'] ?? false,
                 'uid' => Str::uuid()
             ]);
@@ -104,6 +126,7 @@ class IncidentRepository implements IncidentRepositoryInterface
             'victims',
             'perpetrators',
             'evidence',
+            'specialist',
             'supportServices',
             'updates.user'
         ])->first();
@@ -115,6 +138,7 @@ class IncidentRepository implements IncidentRepositoryInterface
             'victims',
             'perpetrators',
             'evidence',
+            'specialist',
             'supportServices',
             'updates.user'
         ])->first();

@@ -10,7 +10,6 @@
     use Laravel\Sanctum\HasApiTokens;
     use OwenIt\Auditing\Auditable;
     use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
-    use PragmaRX\Google2FAQRCode\Google2FA;
 
     class User extends Authenticatable implements AuditableContract {
         use HasApiTokens, HasFactory, Notifiable, SoftDeletes, UserRelationship, UserAttribute, UserAccess, HasProfilePhoto, Auditable;
@@ -21,31 +20,6 @@
             static::creating(function ($user) {
                 $user->uid = str_unique();
             });
-        }
-
-        public static function getUserIdByUid($uid)
-        {
-            return self::query()->where('uid', $uid)->first();
-        }
-
-        public static function getUserIdById($id)
-        {
-            return self::query()->where('id', $id)->first();
-        }
-
-        public static function getUserIdByEmail($email)
-        {
-            return User::query()->where('email', $email)->first();
-        }
-
-        public function twoFactorQrCodeSvg()
-        {
-            $google2fa = new Google2FA();
-            return $google2fa->getQRCodeInline(
-                config('app.name'),
-                $this->email,
-                decrypt($this->two_factor_secret)
-            );
         }
 
         protected $hidden = [

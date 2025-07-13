@@ -15,10 +15,9 @@
 
                                 <p class="text-sm text-gray-600">
                                     <i class="far fa-calendar-alt mr-1"></i> Reported
-                                    on {{ $incident->created_at->format('M d, Y \a\t h:i A') }}
+                                        on {{ $incident->created_at->format('M d, Y \a\t h:i A') }}
                                     @if($incident->is_anonymous)
-                                        <span class="ml-2"><i
-                                                    class="far fa-user-secret mr-1"></i>Anonymous Report</span>
+                                        <span class="ml-2"><i class="far fa-user-secret mr-1"></i>Anonymous Report</span>
                                     @else
                                         <span class="ml-2"><i class="far fa-user mr-1"></i>by {{ $incident->reporter->name }}</span>
                                     @endif
@@ -26,7 +25,7 @@
                             </div>
                         </div>
                         <div class="flex flex-shrink-0 space-x-4">
-                            @if (access()->allow('case_worker'))
+                            @if (access()->allow('case_worker') || access()->allow('law_enforcement'))
                                 <a href="{{ route('backend.incident.edit', $incident->uid) }}"
                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                                     <i class="far fa-edit mr-2"></i> Edit
@@ -66,28 +65,62 @@
                                 </div>
                                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                     <div class="space-y-1">
-                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Type</h4>
+                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</h4>
                                         <p class="text-gray-900 font-medium capitalize flex items-center">
                                             <i class="fas fa-tag text-gray-400 mr-2 text-sm"></i>
                                             {{ str_replace('_', ' ', $incident->type) }}
                                         </p>
                                     </div>
                                     <div class="space-y-1">
-                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Date
-                                            Occurred</h4>
+                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Date Occurred</h4>
                                         <p class="text-gray-900 font-medium flex items-center">
                                             <i class="far fa-calendar text-gray-400 mr-2 text-sm"></i>
                                             {{ $incident->occurred_at->format('M d, Y \a\t h:i A') }}
                                         </p>
                                     </div>
                                     <div class="space-y-1">
-                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                            Location</h4>
+                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Location</h4>
                                         <p class="text-gray-900 font-medium flex items-center">
                                             <i class="fas fa-map-marker-alt text-gray-400 mr-2 text-sm"></i>
                                             {{ $incident->location }}
                                         </p>
+                                    </div>
+                                    <!-- Add Specialist Information -->
+                                    <div class="space-y-1">
+                                        <h4 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned Specialist</h4>
+                                        @if($incident->specialist)
+                                            <div class="flex items-center">
+                                                <div class="relative mr-3">
+                                                    <div class="h-8 w-8 rounded-full bg-indigo-100 flex items-center justify-center">
+                                                        <i class="fas fa-user text-indigo-600 text-sm"></i>
+                                                    </div>
+                                                    @if($incident->specialist->is_online)
+                                                        <span class="absolute bottom-0 right-0 block h-2 w-2 rounded-full bg-green-400 ring-2 ring-white"></span>
+                                                    @endif
+                                                </div>
+                                                <div>
+                                                    <p class="text-gray-900 font-medium">{{ $incident->specialist->name }}</p>
+                                                    <p class="text-xs text-gray-500">
+                                                        @if($incident->specialist->specializations->isNotEmpty())
+                                                            {{ $incident->specialist->specializations->pluck('name')->implode(', ') }}
+                                                        @else
+                                                            General Case Worker
+                                                        @endif
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        @else
+                                            <p class="text-gray-900 font-medium flex items-center">
+                                                <i class="fas fa-user-slash text-gray-400 mr-2 text-sm"></i>
+                                                Not assigned yet
+                                            </p>
+                                            @if (access()->allow('case_worker') || access()->allow('law_enforcement'))
+                                                <button class="mt-1 text-xs text-blue-600 hover:text-blue-800"
+                                                        onclick="assignSpecialist('{{ $incident->uid }}')">
+                                                    <i class="fas fa-user-plus mr-1"></i> Assign specialist
+                                                </button>
+                                            @endif
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -255,8 +288,7 @@
                                     </div>
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         @foreach($incident->supportServices as $service)
-                                            <div
-                                                    class="border border-gray-200 p-4 rounded-lg hover:shadow-md transition-shadow duration-200">
+                                            <div class="border border-gray-200 p-4 rounded-lg hover:shadow-md transition-shadow duration-200">
                                                 <div class="flex items-start">
                                                     <div class="bg-blue-50 p-2 rounded mr-3">
                                                         <i class="fas fa-phone-alt text-blue-500"></i>
@@ -325,7 +357,7 @@
                         </div>
 
                         <div class="space-y-6 w-full">
-                            @if (access()->allow('case_worker'))
+                            @if (access()->allow('case_worker') || access()->allow('law_enforcement'))
                                 <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
                                     <div class="flex items-center mb-4">
                                         <div class="bg-blue-100 p-2 rounded-full mr-3">

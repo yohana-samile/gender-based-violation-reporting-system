@@ -100,7 +100,7 @@
                         <i class="fas fa-home mr-3 text-blue-600"></i>
                         Dashboard
                     </x-nav-link>
-                    @if (access()->allow('case_worker'))
+                    @if (access()->allow('case_worker') || access()->allow('law_enforcement'))
                         <x-nav-link href="{{ route('backend.incident.index') }}" :active="request()->routeIs('gbv.incident.index')" class="flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-md group">
                             <i class="fas fa-list mr-3 text-gray-400 group-hover:text-blue-600"></i>
                             Incidents

@@ -19,7 +19,7 @@ https://github.com/yohana-samile/gender-based-violation-reporting-system
     ## Database migration
     ### command used
     
-    php artisan migrate --path=database/migrations/version100
+    php artisan migrate:fresh --path=database/migrations/version100
     
     php artisan migrate --path=database/migrations/version101
     
